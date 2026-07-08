@@ -1,37 +1,42 @@
 ---
 name: aossie-project-template
-description: >
-  AOSSIE Project Template & Architecture Standards. This skill defines the org-level
-  architecture rules for all AOSSIE projects. Use this skill whenever proposing
-  or implementing new features, creating new components, designing APIs, or
-  making any structural code changes. It contains standards for Next.js, React,
-  Microservices, Web3/Solidity, and REST APIs.
+description: Reference for org-level architecture standards (Next.js, React, Microservices, Web3, REST APIs). Use when proposing or implementing new features, files, or structural code changes.
 ---
 
-# Org-Level Stabilizer
+A skill acting as the **architectural boundary** stabilizer across all AOSSIE repositories. It enforces standards to keep implementations consistent.
 
-> **AGENT INSTRUCTION:** This document defines the organization-level rules for all AOSSIE projects. You may NOT override these rules. They exist to enforce consistency and prevent agents from inventing new architectures.
+**Bold terms** are defined in [GLOSSARY.md](../GLOSSARY.md); look them up there for the full meaning.
 
-## Architecture Standards
+## 1. Stack Identification
 
-Depending on the project's technology stack (check `package.json` or `.agent/core/architecture.md`), load the appropriate reference file below.
+**Trigger:** The user asks to design, write, or refactor code.
 
-**Do NOT load all files — load only the one relevant to the current task.**
+**Steps:**
+1. Check the local `package.json` or project structure to identify the technology stack.
+2. Select the specific **context pointer** matching the stack (do NOT load multiple references to save **context load**).
 
-### Next.js & React Applications
-Load `references/nextjs-standards.md` for rules on App Router, server/client components, state management, and component architecture.
+* **Completion Criterion:** The agent has identified the tech stack and selected the correct reference file.
 
-### Microservice Patterns
-Load `references/microservice-standards.md` for monorepo structure, inter-service communication, state sharing, and deployment environments.
+## 2. Rule Extraction
 
-### Web3 / Smart Contract Patterns
-Load `references/web3-standards.md` for Solidity standards, OpenZeppelin usage, inline assembly restrictions, and testing.
+**Trigger:** A tech stack is identified.
 
-### REST Error Handling
-Load `references/rest-standards.md` for standardized JSON error formats and security restrictions on stack traces.
+**Steps:**
+1. Load the corresponding reference file:
+   - Next.js/React: Load [nextjs-standards.md](references/nextjs-standards.md)
+   - Microservices: Load [microservice-standards.md](references/microservice-standards.md)
+   - Web3/Solidity: Load [web3-standards.md](references/web3-standards.md)
+   - REST API: Load [rest-standards.md](references/rest-standards.md)
+2. Extract the rules and align them with the proposed changes.
 
-## Deviation Warning
+* **Completion Criterion:** The agent has loaded only the matching reference file.
 
-If a contributor asks you to implement an architecture pattern that differs from these standards (e.g., GraphQL instead of REST, vanilla CSS instead of Tailwind if specified):
+## 3. Architecture Deviation Guard
 
-> "This pattern deviates from the AOSSIE Org-Level Standards. Please consult the maintainers in the `#development` Discord channel before proceeding."
+**Trigger:** The user proposes an architecture that differs from standard rules (e.g., GraphQL instead of REST, vanilla CSS instead of Tailwind if Tailwind is specified).
+
+**Steps:**
+1. Halt the code generation.
+2. Output a warning: *"This pattern deviates from the AOSSIE Org-Level Standards. Please consult the maintainers in the `#development` Discord channel before proceeding."*
+
+* **Completion Criterion:** The agent has flagged any deviation and blocked the unapproved pattern.

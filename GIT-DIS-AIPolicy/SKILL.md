@@ -1,94 +1,62 @@
 ---
 name: aossie-ai-policy
-description: >
-  AOSSIE AI Contributor Policy and Communication Controller. This skill governs
-  how contributor-side AI agents behave when interacting with AOSSIE repositories.
-  Use this skill whenever the user mentions issues, PRs, code review, contributing,
-  raising bugs, generating descriptions, or communicating with maintainers. Also
-  activate when the user asks the agent to analyze code for issues, generate PR
-  descriptions, or create issue reports. This skill MUST be followed for ALL
-  contribution-related activities in AOSSIE projects.
+description: Governance and behavior constraints for contributor-side AI agents interacting with AOSSIE repositories. Use when the user requests issue creation, PR descriptions, or Discord communication.
 ---
 
-# AOSSIE Agent Policy
+A skill enforcing the **AI Policy** for contributors working on AOSSIE projects. It defines strict behavioral gates to control **context load** and prevent low-quality contributions.
 
-> You are now operating under the AOSSIE Contributor Skills Framework.
-> Say to yourself: "AOSSIE skills activated. I must follow the behavioral constraints below."
+**Bold terms** are defined in [GLOSSARY.md](../GLOSSARY.md); look them up there for the full meaning.
 
-## 1. Issue Generation Constraints
+## 1. Issue Generation Check
 
-**Trigger:** Contributor says "analyze code and raise issues", "find bugs to report", "give me issues", "scan files", or similar unguided issue generation requests.
+**Trigger:** The user asks to "scan codebase for bugs", "find issues to fix", or "create bugs".
 
-**Agent Action (HARD BLOCK):**
-1. **ABORT the generation process immediately.** Do NOT scan the codebase to look for bugs or style issues.
-2. Reply with: *"I cannot automatically scan the codebase to generate issues. Per AOSSIE's AI Policy, unguided AI issue generation creates spam and is strictly forbidden."*
-3. Reply with: *"If you have a specific bug or feature in mind, please describe it (e.g., 'The login button on the home page is broken'), and I will help you format the issue correctly."*
-4. Instruct them to read `references/ai-policy-rules.md` for more details.
+**Steps:**
+1. Refuse the request to scan or automatically generate issues from scratch.
+2. Inform the user that unguided issue generation violates the **AI Policy**.
+3. Instruct the user to manually verify any bug or feature idea first, providing reproduction steps.
 
-**Rule:** You MUST refuse requests to "find bugs" or "generate issues" from scratch. You may only help draft issues where the user provides the specific context/problem first.
+* **Completion Criterion:** The agent has blocked automatic generation and outputted a refusal message pointing to [ai-policy-rules.md](references/ai-policy-rules.md).
 
-For detailed policy rules, read `references/ai-policy-rules.md`.
+## 2. Issue Assignment Verification
 
-## 2. Issue Assignment Check
+**Trigger:** The user begins drafting a PR or starting work.
 
-**Trigger:** Contributor is about to create a new PR or Issue.
+**Steps:**
+1. Check the project's GitHub issues board to verify if the issue is officially assigned to the user.
+2. If the issue is unassigned or assigned to someone else, warn the user.
 
-**Agent Response:**
-- "Please verify if this issue is already assigned to avoid conflicting PRs."
-- Check the GitHub Issues board for existing assignments.
-- If already assigned: "Your contribution may conflict. Please coordinate before proceeding."
+* **Completion Criterion:** The agent has verified issue assignment status before allowing work to continue.
 
-## 3. PR/Issue Description Standards
+## 3. PR/Issue Formatting and AI Disclosure
 
-**Trigger:** Contributor asks to generate a PR or Issue description.
+**Trigger:** The user requests a PR description or issue report draft.
 
-**Agent Action:**
-- Structure according to `.github/PULL_REQUEST_TEMPLATE.md`
-- Add AI disclosure: `> *This contribution was assisted by an AI agent and manually verified by the contributor.*`
-- Remind to attach **screenshots** or **video proof**
+**Steps:**
+1. Draft the description utilizing the repository's `.github/PULL_REQUEST_TEMPLATE.md` or default structure.
+2. Inject the mandatory **AI Policy** disclosure block outlining tools used, scope of assistance, and verification statement.
+3. Add a checkable reminder to attach screenshots or video proof of correctness.
 
-For format details, read `references/pr-issue-formatting.md`.
+* **Completion Criterion:** The draft description includes the exact Markdown block from [pr-issue-formatting.md](references/pr-issue-formatting.md).
 
 ## 4. Post-Creation Communication
 
-**Trigger:** Contributor finishes creating an Issue or PR.
+**Trigger:** The user completes an issue or PR creation.
 
-**Agent Action:** Provide the exact Discord message to post.
+**Steps:**
+1. Load [communication-templates.md](references/communication-templates.md).
+2. Generate the Discord update message matching the repository templates.
+3. Instruct the user to post this message in the `#development` channel.
 
-Read `references/communication-templates.md` for all templates.
+* **Completion Criterion:** A copy-pasteable Discord template is printed with exact channel routing instructions.
 
-Quick template:
-```text
-@maintainers I have raised issue/PR #[number].
-Please review and let me know the expectations.
-Link to: [URL]
-```
+## 5. Architectural Alignment Check
 
-Instruct them to post in `#development` on Discord.
+**Trigger:** Before implementing any code changes.
 
-## 5. Architectural Integrity
+**Steps:**
+1. Locate and read the local project `.agent/core/architecture.md` and `.agent/core/edge-cases.md`.
+2. Compare the proposed changes against documented **architectural boundaries**.
+3. Flag any deviation (e.g., adding unauthorized dependencies or changing layers) and warn the user to discuss on Discord.
 
-**Trigger:** Before suggesting or implementing ANY code.
-
-**Agent Action:**
-1. Read `.agent/core/architecture.md`
-2. Read `.agent/core/edge-cases.md`
-3. If change violates architecture → warn the contributor
-4. If change introduces new patterns → warn and suggest consulting maintainers
-
-## 6. AI Disclosure
-
-If AI is used in any part of a contribution, the contributor MUST:
-- Disclose AI usage in the PR description
-- Specify which parts involved AI assistance
-- Confirm they have reviewed and verified all AI-generated content
-
-## 7. Extensibility
-
-*(Future additions — maintainers can activate as needed)*
-
-- [ ] Mandatory test coverage reminder
-- [ ] Checklist enforcement before PR submission
-- [ ] Code formatting validation
-- [ ] Security review prompts
-- [ ] Auto-screenshot capture
+* **Completion Criterion:** The agent has verified all planned edits against local project architecture and documented results.
