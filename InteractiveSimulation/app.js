@@ -830,7 +830,7 @@ document.getElementById("prompt-choices").addEventListener("click", (e) => {
     const choice = choiceBtn.getAttribute("data-choice");
     
     // Call Scenario A Step 3 run logic using the choice
-    const steps = SCENARIOS.a.steps;
+    const steps = SCENARIOS[activeScenario].steps;
     steps[2].run(engine, choice);
     
     scenarioStep = 3;
