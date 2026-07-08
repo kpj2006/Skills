@@ -90,13 +90,14 @@ const SCENARIOS = {
                     engine.simulateDiscordUserMsg("How do I deploy this template to production?");
                     engine.setCardActive("bot", true);
                     engine.addLog("Skill Bot: Intercepted query. Starting vector index search...", "info");
+                    return Promise.resolve();
                 }
             },
             {
                 label: "Scan Skills Core",
                 run: (engine) => {
                     engine.addLog("Skill Bot: Computing similarity embedding for query...", "info");
-                    engine.animatePacket("core", "bot", () => {
+                    return engine.animatePacket("core", "bot", () => {
                         engine.addLog("Skill Bot: Retrieved 'setup.md' and 'architecture.md' embeddings from Skills Core index.", "info");
                         engine.addLog("Skill Bot: Cosine similarity score = 0.45. Confidence threshold is 0.70.", "warn");
                         engine.addLog("Skill Bot: Question is ambiguous (no production rules found in setup.md). Triggering ambiguity classifier...", "warn");
@@ -119,30 +120,32 @@ const SCENARIOS = {
                         engine.simulateDiscordBotMsg("Are you setting up for a local development build, or deploying to a cloud server like AWS/Vercel?");
                         engine.addLog("Skill Bot [Clarification Flow]: Asked clarifying question to refine intent.", "info");
                         
-                        setTimeout(() => {
-                            engine.simulateDiscordUserMsg("Deploying to AWS RDS + App Runner");
-                            engine.addLog("User replied: 'Deploying to AWS RDS + App Runner'", "system");
-                            
+                        return new Promise((resolve) => {
                             setTimeout(() => {
-                                engine.addLog("Skill Bot: Re-evaluating refined query: 'AWS App Runner setup'...", "info");
-                                engine.simulateDiscordBotMsg("Found no specific deployment skill for AWS RDS in Skills Core. However, general Docker containers run via AWS App Runner. Let me write this query to the Gap Logs.");
-                                engine.addLog("Skill Bot: Confirmed knowledge gap. Logging GAP SIGNAL to gap_log.json.", "warn");
+                                engine.simulateDiscordUserMsg("Deploying to AWS RDS + App Runner");
+                                engine.addLog("User replied: 'Deploying to AWS RDS + App Runner'", "system");
                                 
-                                // Send gap packet to updater
-                                engine.animatePacket("bot", "updater", () => {
-                                    engine.addLog("Skill Updater: Intercepted GAP SIGNAL: {'query': 'AWS App Runner deployment', 'source': 'Discord #ai-chat'}", "success");
-                                    engine.setCardActive("updater", true);
-                                    engine.setUpdaterStepActive("poll", "Gap Signal Added to Queue");
-                                });
+                                setTimeout(() => {
+                                    engine.addLog("Skill Bot: Re-evaluating refined query: 'AWS App Runner setup'...", "info");
+                                    engine.simulateDiscordBotMsg("Found no specific deployment skill for AWS RDS in Skills Core. However, general Docker containers run via AWS App Runner. Let me write this query to the Gap Logs.");
+                                    engine.addLog("Skill Bot: Confirmed knowledge gap. Logging GAP SIGNAL to gap_log.json.", "warn");
+                                    
+                                    // Send gap packet to updater
+                                    engine.animatePacket("bot", "updater", () => {
+                                        engine.addLog("Skill Updater: Intercepted GAP SIGNAL: {'query': 'AWS App Runner deployment', 'source': 'Discord #ai-chat'}", "success");
+                                        engine.setCardActive("updater", true);
+                                        engine.setUpdaterStepActive("poll", "Gap Signal Added to Queue");
+                                    }).then(resolve);
+                                }, 1200);
                             }, 1200);
-                        }, 1200);
+                        });
                     } else {
                         // Direct LLM fallback and Gap logging
                         engine.simulateDiscordBotMsg("I couldn't find deployment instructions in our Skills Core. Falling back to general LLM guidelines. [Warning: General advice only. Setup may differ.]");
                         engine.addLog("Skill Bot: confidence < 0.70. Emitted fallback response.", "warn");
                         engine.addLog("Skill Bot: Emitting GAP SIGNAL to gap_log.json...", "warn");
                         
-                        engine.animatePacket("bot", "updater", () => {
+                        return engine.animatePacket("bot", "updater", () => {
                             engine.addLog("Skill Updater: Intercepted GAP SIGNAL: {'query': 'deploy to production', 'source': 'Discord #ai-chat'}", "success");
                             engine.setCardActive("updater", true);
                             engine.setUpdaterStepActive("poll", "Gap Signal Logged");
@@ -163,13 +166,14 @@ const SCENARIOS = {
                     engine.addLog("PR Dashboard: Fetching open PRs from Github API...", "info");
                     engine.addLog("PR Dashboard: Found 2 overlapping PRs: PR #41 (Add Direct PostgreSQL Client) and PR #42 (Setup Prisma ORM)", "info");
                     engine.setCardActive("dash", true);
+                    return Promise.resolve();
                 }
             },
             {
                 label: "Inject Skills Core Context",
                 run: (engine) => {
                     engine.addLog("PR Dashboard: Querying ChromaDB vector store of Skills Core...", "info");
-                    engine.animatePacket("core", "dash", () => {
+                    return engine.animatePacket("core", "dash", () => {
                         engine.addLog("PR Dashboard: Matched and injected context from '.agent/core/architecture.md' (rules on Prisma/DB models).", "info");
                         engine.addLog("PR Dashboard: Running local Ollama inference on conflict analysis...", "info");
                     });
@@ -188,7 +192,7 @@ const SCENARIOS = {
                     // Emitting Staleness signal
                     engine.addLog("PR Dashboard: Stale Skill detected (PR #42 introduces node 20 & npm 10 engines which are undocumented in setup.md). Emitting STALENESS SIGNAL to Skill Updater.", "warn");
                     
-                    engine.animatePacket("dash", "updater", () => {
+                    return engine.animatePacket("dash", "updater", () => {
                         engine.addLog("Skill Updater: Received STALENESS SIGNAL: {'file': '.agent/instructions/setup.md', 'type': 'outdated node engine'}", "success");
                         engine.setCardActive("updater", true);
                         engine.setUpdaterStepActive("poll", "Staleness Signal Logged");
@@ -209,6 +213,7 @@ const SCENARIOS = {
                     engine.addLog("Skill Updater: Aggregating active inputs: 1 Discord thread, 1 Gap Signal, 1 Staleness Signal.", "info");
                     engine.setCardActive("updater", true);
                     engine.setUpdaterStepActive("poll", "Polling Active: 3 signals fetched");
+                    return Promise.resolve();
                 }
             },
             {
@@ -218,10 +223,13 @@ const SCENARIOS = {
                     engine.addLog("Skill Updater: Running BERTopic Incremental Online Clustering...", "info");
                     engine.setUpdaterStepActive("cluster", "BERTopic: Groups formed");
                     
-                    setTimeout(() => {
-                        engine.addLog("Skill Updater: Grouped 3 signals into Cluster #5: 'development setup dependencies update'.", "success");
-                        engine.addLog("Skill Updater: Representative phrase: 'Upgrade local dev server setup details with Node 20 / AWS deployment options'.", "info");
-                    }, 500);
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            engine.addLog("Skill Updater: Grouped 3 signals into Cluster #5: 'development setup dependencies update'.", "success");
+                            engine.addLog("Skill Updater: Representative phrase: 'Upgrade local dev server setup details with Node 20 / AWS deployment options'.", "info");
+                            resolve();
+                        }, 500);
+                    });
                 }
             },
             {
@@ -249,6 +257,7 @@ index a3f821d..b59ec42 100644
                     diffText.textContent = patchStr;
                     engine.addLog("Skill Updater: Generated JSON git-patch structure.", "success");
                     engine.setUpdaterStepActive("patch", "Patch Ready");
+                    return Promise.resolve();
                 }
             },
             {
@@ -256,7 +265,7 @@ index a3f821d..b59ec42 100644
                 run: (engine) => {
                     engine.addLog("Skill Updater: Executing skill_patcher.py on local Skills Core workspace...", "info");
                     
-                    engine.animatePacket("updater", "core", () => {
+                    return engine.animatePacket("updater", "core", () => {
                         engine.addLog("Skills Core: Patch applied successfully in Git. Created commit 'docs: update setup instructions node version & AWS context'.", "success");
                         
                         // Dynamically update Skills Core file Explorer content!
@@ -491,56 +500,62 @@ class SimulationEngine {
     }
 
     animatePacket(fromId, toId, onComplete) {
-        // Ensure connections are initialized and have valid paths before animating
-        const pathEl = document.getElementById(`path-${fromId}-${toId}`);
-        if (!connectionsCalculated || !pathEl || !pathEl.getAttribute("d")) {
-            updateConnections();
-        }
-
-        const packet = document.getElementById(`packet-${fromId}-${toId}`);
-        const path = document.getElementById(`path-${fromId}-${toId}`);
-        
-        if (!packet || !path) {
-            if (onComplete) onComplete();
-            return;
-        }
-
-        // Highlight the path and focus both elements
-        path.classList.add("active-flow");
-        this.focusCards([fromId, toId]);
-
-        packet.style.display = "block";
-        
-        const pathLength = path.getTotalLength();
-        let start = null;
-        const duration = 1200; // 1.2s animation speed
-
-        const self = this;
-        function step(timestamp) {
-            if (!start) start = timestamp;
-            const progress = (timestamp - start) / duration;
-
-            if (progress < 1) {
-                // Calculate position along SVG path
-                const currentLength = progress * pathLength;
-                const point = path.getPointAtLength(currentLength);
-                
-                packet.setAttribute("cx", point.x);
-                packet.setAttribute("cy", point.y);
-                
-                requestAnimationFrame(step);
-            } else {
-                packet.style.display = "none";
-                path.classList.remove("active-flow");
-                
-                // Focus only the target card after packet arrives
-                self.focusCards([toId]);
-                
-                if (onComplete) onComplete();
+        return new Promise((resolve) => {
+            // Ensure connections are initialized and have valid paths before animating
+            const pathEl = document.getElementById(`path-${fromId}-${toId}`);
+            if (!connectionsCalculated || !pathEl || !pathEl.getAttribute("d")) {
+                updateConnections();
             }
-        }
-        
-        requestAnimationFrame(step);
+
+            const packet = document.getElementById(`packet-${fromId}-${toId}`);
+            const path = document.getElementById(`path-${fromId}-${toId}`);
+            
+            const done = () => {
+                if (onComplete) onComplete();
+                resolve();
+            };
+
+            if (!packet || !path) {
+                done();
+                return;
+            }
+
+            // Highlight the path and focus both elements
+            path.classList.add("active-flow");
+            this.focusCards([fromId, toId]);
+
+            packet.style.display = "block";
+            
+            const pathLength = path.getTotalLength();
+            let start = null;
+            const duration = 1200; // 1.2s animation speed
+
+            const self = this;
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                const progress = (timestamp - start) / duration;
+
+                if (progress < 1) {
+                    // Calculate position along SVG path
+                    const currentLength = progress * pathLength;
+                    const point = path.getPointAtLength(currentLength);
+                    
+                    packet.setAttribute("cx", point.x);
+                    packet.setAttribute("cy", point.y);
+                    
+                    requestAnimationFrame(step);
+                } else {
+                    packet.style.display = "none";
+                    path.classList.remove("active-flow");
+                    
+                    // Focus only the target card after packet arrives
+                    self.focusCards([toId]);
+                    
+                    done();
+                }
+            }
+            requestAnimationFrame(step);
+        });
     }
 }
 
@@ -800,13 +815,12 @@ function runNextStep() {
         
         engine.addLog(`[STEP ${scenarioStep + 1}/${steps.length}] Running: ${step.label}...`, "system");
         
-        // Execute step logic
-        step.run(engine);
+        // Execute step logic and wait for it to signal completion
+        const stepPromise = Promise.resolve(step.run(engine));
         
         scenarioStep++;
         
-        // Re-enable trigger button after short delay unless scenario is finished or blocking
-        setTimeout(() => {
+        stepPromise.then(() => {
             // Check if scenario requires user input choice and is blocking
             const hasChoicesOpen = document.getElementById("prompt-choices").style.display === "flex";
             
@@ -818,7 +832,7 @@ function runNextStep() {
                     triggerBtn.disabled = false;
                 }
             }
-        }, 1300);
+        });
     }
 }
 
