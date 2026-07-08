@@ -1,6 +1,19 @@
 /* AOSSIE Skill Ecosystem Simulation Logic */
 
 // --- 1. Mock Skills Core File Data ---
+const SETUP_TEMPLATE = `# Project Setup & Local Development
+
+## Prerequisites
+- Node.js 18+
+- Docker & Docker Compose
+
+## Local Development Setup
+1. Clone repo: git clone https://github.com/AOSSIE-Org/PROJECT.git
+2. Install dependencies: npm install
+3. Start database: docker-compose up -d
+4. Run migrations: npx prisma migrate dev
+5. Run dev server: npm run dev`;
+
 const MOCK_FILES = {
     architecture: {
         path: ".agent/core/architecture.md",
@@ -30,18 +43,7 @@ This repository follows a modular structure:
     },
     setup: {
         path: ".agent/instructions/setup.md",
-        content: `# Project Setup & Local Development
-
-## Prerequisites
-- Node.js 18+
-- Docker & Docker Compose
-
-## Local Development Setup
-1. Clone repo: git clone https://github.com/AOSSIE-Org/PROJECT.git
-2. Install dependencies: npm install
-3. Start database: docker-compose up -d
-4. Run migrations: npx prisma migrate dev
-5. Run dev server: npm run dev`
+        content: SETUP_TEMPLATE
     },
     testing: {
         path: ".agent/instructions/testing.md",
@@ -301,8 +303,13 @@ class SimulationEngine {
         const line = document.createElement("div");
         line.className = `log-line ${type}-log`;
         
+        const timestampSpan = document.createElement("span");
+        timestampSpan.style.color = "var(--text-muted)";
         const timestamp = new Date().toLocaleTimeString();
-        line.innerHTML = `<span style="color: var(--text-muted)">[${timestamp}]</span> ${text}`;
+        timestampSpan.textContent = `[${timestamp}] `;
+        
+        line.appendChild(timestampSpan);
+        line.appendChild(document.createTextNode(text));
         
         this.terminal.appendChild(line);
         this.terminal.scrollTop = this.terminal.scrollHeight;
@@ -393,13 +400,30 @@ class SimulationEngine {
         const box = document.getElementById("discord-messages");
         const msg = document.createElement("div");
         msg.className = "discord-message";
-        msg.innerHTML = `
-            <div class="avatar user-avatar"><i class="fa-solid fa-user"></i></div>
-            <div class="msg-content">
-                <div class="author-name">Contributor_XYZ</div>
-                <div class="msg-text">${text}</div>
-            </div>
-        `;
+
+        const avatar = document.createElement("div");
+        avatar.className = "avatar user-avatar";
+        const icon = document.createElement("i");
+        icon.className = "fa-solid fa-user";
+        avatar.appendChild(icon);
+
+        const msgContent = document.createElement("div");
+        msgContent.className = "msg-content";
+
+        const authorName = document.createElement("div");
+        authorName.className = "author-name";
+        authorName.textContent = "Contributor_XYZ";
+
+        const msgText = document.createElement("div");
+        msgText.className = "msg-text";
+        msgText.textContent = text;
+
+        msgContent.appendChild(authorName);
+        msgContent.appendChild(msgText);
+
+        msg.appendChild(avatar);
+        msg.appendChild(msgContent);
+
         box.appendChild(msg);
         box.scrollTop = box.scrollHeight;
     }
@@ -408,13 +432,35 @@ class SimulationEngine {
         const box = document.getElementById("discord-messages");
         const msg = document.createElement("div");
         msg.className = "discord-message bot-msg";
-        msg.innerHTML = `
-            <div class="avatar bot-avatar"><i class="fa-solid fa-robot"></i></div>
-            <div class="msg-content">
-                <div class="author-name">SkillBot <span class="bot-badge">BOT</span></div>
-                <div class="msg-text">${text}</div>
-            </div>
-        `;
+
+        const avatar = document.createElement("div");
+        avatar.className = "avatar bot-avatar";
+        const icon = document.createElement("i");
+        icon.className = "fa-solid fa-robot";
+        avatar.appendChild(icon);
+
+        const msgContent = document.createElement("div");
+        msgContent.className = "msg-content";
+
+        const authorName = document.createElement("div");
+        authorName.className = "author-name";
+        authorName.textContent = "SkillBot ";
+
+        const botBadge = document.createElement("span");
+        botBadge.className = "bot-badge";
+        botBadge.textContent = "BOT";
+        authorName.appendChild(botBadge);
+
+        const msgText = document.createElement("div");
+        msgText.className = "msg-text";
+        msgText.textContent = text;
+
+        msgContent.appendChild(authorName);
+        msgContent.appendChild(msgText);
+
+        msg.appendChild(avatar);
+        msg.appendChild(msgContent);
+
         box.appendChild(msg);
         box.scrollTop = box.scrollHeight;
     }
@@ -445,6 +491,12 @@ class SimulationEngine {
     }
 
     animatePacket(fromId, toId, onComplete) {
+        // Ensure connections are initialized and have valid paths before animating
+        const pathEl = document.getElementById(`path-${fromId}-${toId}`);
+        if (!connectionsCalculated || !pathEl || !pathEl.getAttribute("d")) {
+            updateConnections();
+        }
+
         const packet = document.getElementById(`packet-${fromId}-${toId}`);
         const path = document.getElementById(`path-${fromId}-${toId}`);
         
@@ -638,18 +690,7 @@ function resetSimulation() {
     scenarioStep = 0;
     
     // Reset file edits
-    MOCK_FILES.setup.content = `# Project Setup & Local Development
-
-## Prerequisites
-- Node.js 18+
-- Docker & Docker Compose
-
-## Local Development Setup
-1. Clone repo: git clone https://github.com/AOSSIE-Org/PROJECT.git
-2. Install dependencies: npm install
-3. Start database: docker-compose up -d
-4. Run migrations: npx prisma migrate dev
-5. Run dev server: npm run dev`;
+    MOCK_FILES.setup.content = SETUP_TEMPLATE;
 
     renderFile("architecture");
     
@@ -741,6 +782,12 @@ function stopAutoplay() {
 
 // Run next step execution
 function runNextStep() {
+    // Ensure connections are initialized and have valid paths before executing step
+    const samplePath = document.getElementById("path-core-bot");
+    if (!connectionsCalculated || !samplePath || !samplePath.getAttribute("d")) {
+        updateConnections();
+    }
+
     const scenario = SCENARIOS[activeScenario];
     const steps = scenario.steps;
     
@@ -792,6 +839,11 @@ document.getElementById("prompt-choices").addEventListener("click", (e) => {
     const triggerBtn = document.getElementById("btn-trigger-action");
     triggerBtn.innerHTML = `<i class="fa-solid fa-check"></i> Scenario Finished`;
     triggerBtn.disabled = true;
+});
+
+// Pre-initialize connections on DOMContentLoaded to ensure paths exist early
+document.addEventListener("DOMContentLoaded", () => {
+    updateConnections();
 });
 
 // Initial bootstrapper
