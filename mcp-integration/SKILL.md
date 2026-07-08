@@ -3,6 +3,8 @@ name: aossie-mcp-integration
 description: Guides developer agents on how to leverage and initialize Model Context Protocol (MCP) servers (GitHub & Puppeteer) to automate code changes, UI/UX testing, and PR management in AOSSIE projects.
 ---
 
+# MCP Integration & Configuration
+
 A skill outlining the protocol and triggers for contributor-side AI agents to discover, initialize, and use Model Context Protocol (MCP) servers to automate tasks.
 
 **Bold terms** are defined in [GLOSSARY.md](../GLOSSARY.md); look them up there for the full meaning.
