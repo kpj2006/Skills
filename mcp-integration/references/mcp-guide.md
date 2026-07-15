@@ -52,9 +52,12 @@ Provides headless browser automation tools so the agent can load, click, and ins
 ---
 
 ## 3. Component Playgrounds / Storybook Integration
+
 For frontend libraries, having a lightweight Storybook or preview app is incredibly powerful when paired with a Browser/Puppeteer MCP. It allows the agent to visually audit components for accessibility, layout breaks, and responsiveness.
 
 ### Key Tasks the Agent Can Perform:
+
+1. **Accessibility Audits:** Analyze the accessibility tree, check color contrast ratios, and verify keyboard navigation.
 1. **Accessibility Audits:** Analyze the accessibility tree, check color contrast ratios, and verify keyboard navigation.
 2. **Responsive Design Verification:** Programmatically resize the viewport across mobile, tablet, and desktop widths to check for responsive layout breaks.
 3. **Variant Visual Verification:** Interact with different component states/props (e.g., hover, disabled, active, light/dark themes) and capture visual screenshots of each state.
