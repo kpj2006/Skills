@@ -144,7 +144,7 @@ const SCENARIOS = {
                         engine.addLog("Skill Bot: Question is ambiguous (no production rules found in setup.md). Checking global policies...", "warn");
                         
                         // Briefly check core skills as well
-                        engine.animatePacket("core", "bot", () => {
+                        return engine.animatePacket("core", "bot", () => {
                             engine.addLog("Skill Bot: Scanned Skills Core for global AI policy compliance.", "info");
                             // Show Choice Prompt to user in UI
                             document.getElementById("prompt-choices").style.display = "flex";
@@ -222,7 +222,7 @@ const SCENARIOS = {
                         engine.addLog("PR Dashboard: Matched and injected context from local '.agent/core/architecture.md' (rules on Prisma/DB models).", "info");
                         engine.addLog("PR Dashboard: Cross-referencing Org-Wide Skills Core for AI Policies...", "info");
                         
-                        engine.animatePacket("core", "dash", () => {
+                        return engine.animatePacket("core", "dash", () => {
                             engine.addLog("PR Dashboard: Checked compliance with GIT-DIS-AIPolicy.", "success");
                             engine.addLog("PR Dashboard: Running local Ollama inference on conflict analysis...", "info");
                         });
@@ -562,7 +562,13 @@ class SimulationEngine {
             const path = document.getElementById(`path-${fromId}-${toId}`);
             
             const done = () => {
-                if (onComplete) onComplete();
+                if (onComplete) {
+                    const result = onComplete();
+                    if (result instanceof Promise) {
+                        result.then(resolve);
+                        return;
+                    }
+                }
                 resolve();
             };
 
