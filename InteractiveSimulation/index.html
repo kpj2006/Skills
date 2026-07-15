@@ -45,6 +45,43 @@
                 </linearGradient>
                 
                 <!-- Glowing filters -->
+                <linearGradient id="grad-repo-bot" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#3B82F6" />
+                    <stop offset="100%" stop-color="#8B5CF6" />
+                </linearGradient>
+                <linearGradient id="grad-core-bot" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#10B981" />
+                    <stop offset="100%" stop-color="#8B5CF6" />
+                </linearGradient>
+                <linearGradient id="grad-repo-dash" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#3B82F6" />
+                    <stop offset="100%" stop-color="#06B6D4" />
+                </linearGradient>
+                <linearGradient id="grad-core-dash" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#10B981" />
+                    <stop offset="100%" stop-color="#06B6D4" />
+                </linearGradient>
+                <linearGradient id="grad-bot-updater" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#8B5CF6" />
+                    <stop offset="100%" stop-color="#F59E0B" />
+                </linearGradient>
+                <linearGradient id="grad-dash-updater" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#06B6D4" />
+                    <stop offset="100%" stop-color="#F59E0B" />
+                </linearGradient>
+                <linearGradient id="grad-updater-repo" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#F59E0B" />
+                    <stop offset="100%" stop-color="#3B82F6" />
+                </linearGradient>
+                <linearGradient id="grad-updater-core" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#F59E0B" />
+                    <stop offset="100%" stop-color="#10B981" />
+                </linearGradient>
+                
+                <!-- Glowing filters -->
+                <filter id="glow-repo" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#3B82F6" flood-opacity="0.6"/>
+                </filter>
                 <filter id="glow-core" x="-20%" y="-20%" width="140%" height="140%">
                     <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#10B981" flood-opacity="0.6"/>
                 </filter>
@@ -52,7 +89,7 @@
                     <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#8B5CF6" flood-opacity="0.6"/>
                 </filter>
                 <filter id="glow-dash" x="-20%" y="-20%" width="140%" height="140%">
-                    <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#3B82F6" flood-opacity="0.6"/>
+                    <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#06B6D4" flood-opacity="0.6"/>
                 </filter>
                 <filter id="glow-updater" x="-20%" y="-20%" width="140%" height="140%">
                     <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#F59E0B" flood-opacity="0.6"/>
@@ -60,18 +97,24 @@
             </defs>
             
             <!-- Connection Paths -->
-            <path id="path-core-bot" d="" fill="none" stroke="url(#grad-core-bot)" stroke-width="3" stroke-dasharray="8 6" />
-            <path id="path-core-dash" d="" fill="none" stroke="url(#grad-core-dash)" stroke-width="3" stroke-dasharray="8 6" />
+            <path id="path-repo-bot" d="" fill="none" stroke="url(#grad-repo-bot)" stroke-width="3" stroke-dasharray="8 6" />
+            <path id="path-core-bot" d="" fill="none" stroke="url(#grad-core-bot)" stroke-width="2" stroke-dasharray="4 4" opacity="0.6" />
+            <path id="path-repo-dash" d="" fill="none" stroke="url(#grad-repo-dash)" stroke-width="3" stroke-dasharray="8 6" />
+            <path id="path-core-dash" d="" fill="none" stroke="url(#grad-core-dash)" stroke-width="2" stroke-dasharray="4 4" opacity="0.6" />
             <path id="path-bot-updater" d="" fill="none" stroke="url(#grad-bot-updater)" stroke-width="3" stroke-dasharray="8 6" />
             <path id="path-dash-updater" d="" fill="none" stroke="url(#grad-dash-updater)" stroke-width="3" stroke-dasharray="8 6" />
-            <path id="path-updater-core" d="" fill="none" stroke="url(#grad-updater-core)" stroke-width="3" stroke-dasharray="8 6" />
+            <path id="path-updater-repo" d="" fill="none" stroke="url(#grad-updater-repo)" stroke-width="3" stroke-dasharray="8 6" />
+            <path id="path-updater-core" d="" fill="none" stroke="url(#grad-updater-core)" stroke-width="2" stroke-dasharray="4 4" opacity="0.6" />
 
             <!-- Animated flowing packets (circles) -->
-            <circle id="packet-core-bot" r="6" fill="#10B981" filter="url(#glow-core)" style="display: none;"></circle>
-            <circle id="packet-core-dash" r="6" fill="#10B981" filter="url(#glow-core)" style="display: none;"></circle>
+            <circle id="packet-repo-bot" r="6" fill="#3B82F6" filter="url(#glow-repo)" style="display: none;"></circle>
+            <circle id="packet-core-bot" r="5" fill="#10B981" filter="url(#glow-core)" style="display: none;"></circle>
+            <circle id="packet-repo-dash" r="6" fill="#3B82F6" filter="url(#glow-repo)" style="display: none;"></circle>
+            <circle id="packet-core-dash" r="5" fill="#10B981" filter="url(#glow-core)" style="display: none;"></circle>
             <circle id="packet-bot-updater" r="6" fill="#8B5CF6" filter="url(#glow-bot)" style="display: none;"></circle>
-            <circle id="packet-dash-updater" r="6" fill="#3B82F6" filter="url(#glow-dash)" style="display: none;"></circle>
-            <circle id="packet-updater-core" r="6" fill="#F59E0B" filter="url(#glow-updater)" style="display: none;"></circle>
+            <circle id="packet-dash-updater" r="6" fill="#06B6D4" filter="url(#glow-dash)" style="display: none;"></circle>
+            <circle id="packet-updater-repo" r="6" fill="#F59E0B" filter="url(#glow-updater)" style="display: none;"></circle>
+            <circle id="packet-updater-core" r="5" fill="#F59E0B" filter="url(#glow-updater)" style="display: none;"></circle>
         </svg>
 
         <!-- Main Header -->
@@ -83,10 +126,15 @@
                     <p class="subtitle">Closed-Loop Interactive Agent Governance & Knowledge Simulation</p>
                 </div>
             </div>
-            <div class="system-status">
-                <div class="status-indicator">
-                    <span class="status-dot pulsing"></span>
-                    <span class="status-text">SYSTEM SIMULATION RUNNING</span>
+            <div class="header-right">
+                <button class="btn btn-help" id="btn-toggle-guide">
+                    <i class="fa-solid fa-circle-question"></i> Show User Guide
+                </button>
+                <div class="system-status">
+                    <div class="status-indicator">
+                        <span class="status-dot pulsing"></span>
+                        <span class="status-text">SYSTEM SIMULATION RUNNING</span>
+                    </div>
                 </div>
             </div>
         </header>
@@ -126,46 +174,82 @@
         <!-- Main Dashboard Grid -->
         <main class="dashboard-grid">
             
-            <!-- 1. SKILLS CORE (Green) -->
+            <!-- 1. PER-REPOSITORY SKILLS (Blue/Teal) -->
+            <article class="card card-repo" id="card-repo">
+                <div class="card-header">
+                    <div class="header-title">
+                        <i class="fa-solid fa-folder-tree icon-repo"></i>
+                        <h2>Per-Repository Skills</h2>
+                    </div>
+                    <span class="badge badge-repo">LOCAL CONTEXT (.agent/)</span>
+                </div>
+                <p class="card-desc">Project-specific local context, rules, boundaries, and setup instructions. 90% of bot/PR tasks are resolved directly here.</p>
+                
+                <div class="core-explorer">
+                    <!-- File Explorer List -->
+                    <div class="file-tree" id="file-tree-repo">
+                        <div class="tree-header">Local Repo Context</div>
+                        <div class="tree-item active" data-file="architecture" data-tree="repo">
+                            <i class="fa-solid fa-file-lines text-blue"></i> .agent/core/architecture.md
+                        </div>
+                        <div class="tree-item" data-file="edge-cases" data-tree="repo">
+                            <i class="fa-solid fa-file-lines text-blue"></i> .agent/core/edge-cases.md
+                        </div>
+                        <div class="tree-item" data-file="setup" data-tree="repo">
+                            <i class="fa-solid fa-file-lines text-blue"></i> .agent/instructions/setup.md
+                        </div>
+                        <div class="tree-item" data-file="testing" data-tree="repo">
+                            <i class="fa-solid fa-file-lines text-blue"></i> .agent/instructions/testing.md
+                        </div>
+                        <div class="tree-item" data-file="operational" data-tree="repo">
+                            <i class="fa-solid fa-file-lines text-blue"></i> .agent/info/operational-data.md
+                        </div>
+                    </div>
+                    <!-- File Editor Panel -->
+                    <div class="file-editor">
+                        <div class="editor-header" id="editor-filename-repo">.agent/core/architecture.md</div>
+                        <pre class="editor-content" id="editor-body-repo">Loading...</pre>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 2. SKILLS CORE (Green) -->
             <article class="card card-core" id="card-core">
                 <div class="card-header">
                     <div class="header-title">
                         <i class="fa-solid fa-database icon-core"></i>
                         <h2>Skills Core</h2>
                     </div>
-                    <span class="badge badge-core">GROUND TRUTH (GIT)</span>
+                    <span class="badge badge-core">ORG-WIDE SKILLS</span>
                 </div>
-                <p class="card-desc">Project architecture, constraints, setup guidelines, and org-level governance rules stored in Markdown. Anchors all AI interactions.</p>
+                <p class="card-desc">Global organization-wide skills (like AI Policy & onboarding flows). Unified and synced to repos via Git Subtrees.</p>
                 
                 <div class="core-explorer">
                     <!-- File Explorer List -->
-                    <div class="file-tree" id="file-tree">
-                        <div class="tree-header">Workspace</div>
-                        <div class="tree-item active" data-file="architecture">
-                            <i class="fa-solid fa-file-lines text-green"></i> .agent/core/architecture.md
+                    <div class="file-tree" id="file-tree-core">
+                        <div class="tree-header">Org-Wide Core Skills</div>
+                        <div class="tree-item" data-file="policy" data-tree="core">
+                            <i class="fa-solid fa-file-shield text-green"></i> GIT-DIS-AIPolicy/SKILL.md
                         </div>
-                        <div class="tree-item" data-file="edge-cases">
-                            <i class="fa-solid fa-file-lines text-green"></i> .agent/core/edge-cases.md
+                        <div class="tree-item" data-file="onboarding" data-tree="core">
+                            <i class="fa-solid fa-file-shield text-green"></i> onboarding/SKILL.md
                         </div>
-                        <div class="tree-item" data-file="setup">
-                            <i class="fa-solid fa-file-lines text-green"></i> .agent/instructions/setup.md
+                        <div class="tree-item" data-file="mcp" data-tree="core">
+                            <i class="fa-solid fa-file-shield text-green"></i> mcp-integration/SKILL.md
                         </div>
-                        <div class="tree-item" data-file="testing">
-                            <i class="fa-solid fa-file-lines text-green"></i> .agent/instructions/testing.md
-                        </div>
-                        <div class="tree-item" data-file="policy">
-                            <i class="fa-solid fa-file-shield text-green"></i> skills/GIT-DIS-AIPolicy/SKILL.md
+                        <div class="tree-item" data-file="glossary" data-tree="core">
+                            <i class="fa-solid fa-file-lines text-green"></i> GLOSSARY.md
                         </div>
                     </div>
                     <!-- File Editor Panel -->
                     <div class="file-editor">
-                        <div class="editor-header" id="editor-filename">.agent/core/architecture.md</div>
-                        <pre class="editor-content" id="editor-body">Loading...</pre>
+                        <div class="editor-header" id="editor-filename-core">GIT-DIS-AIPolicy/SKILL.md</div>
+                        <pre class="editor-content" id="editor-body-core">Loading...</pre>
                     </div>
                 </div>
             </article>
 
-            <!-- 2. SKILL BOT (Purple) -->
+            <!-- 3. SKILL BOT (Purple) -->
             <article class="card card-bot" id="card-bot">
                 <div class="card-header">
                     <div class="header-title">
@@ -174,7 +258,7 @@
                     </div>
                     <span class="badge badge-bot">DISCORD ASSISTANT</span>
                 </div>
-                <p class="card-desc">Grounded in Skills Core. Intercepts contributor questions in dedicated threads, asks clarifying questions, and emits Gap Signals on low-confidence queries.</p>
+                <p class="card-desc">Grounded in local Per-Repository Skills. Intercepts contributor questions, asks clarifying questions, and emits Gap Signals when local rules are insufficient.</p>
                 
                 <div class="discord-simulator">
                     <div class="discord-header">
@@ -193,7 +277,7 @@
                             <div class="avatar bot-avatar"><i class="fa-solid fa-robot"></i></div>
                             <div class="msg-content">
                                 <div class="author-name">SkillBot <span class="bot-badge">BOT</span></div>
-                                <div class="msg-text">Welcome! Let me check the Skills Core context for setup steps...</div>
+                                <div class="msg-text">Welcome! Let me check the local repository context for setup steps...</div>
                             </div>
                         </div>
                     </div>
@@ -209,7 +293,7 @@
                 </div>
             </article>
 
-            <!-- 3. PR DASHBOARD (Blue) -->
+            <!-- 4. PR DASHBOARD (Blue) -->
             <article class="card card-dash" id="card-dash">
                 <div class="card-header">
                     <div class="header-title">
@@ -218,7 +302,7 @@
                     </div>
                     <span class="badge badge-dash">MAINTAINER SYSTEM</span>
                 </div>
-                <p class="card-desc">Pulls PR summaries, runs semantic similarity against Skills Core to inject context, determines conflict graphs, and emits Staleness Signals to the Updater.</p>
+                <p class="card-desc">Queries local Per-Repository Skills to inject architectural boundaries, analyze open PRs, detect semantic conflicts, and signal staleness.</p>
                 
                 <div class="dashboard-simulator">
                     <div class="dashboard-tabs">
@@ -247,7 +331,7 @@
                             </div>
                         </div>
                         <div class="conflict-explanation" id="conflict-explanation">
-                            <strong>Conflict Reasoning (Ollama + Skills Core):</strong> Alice adds pg-client utilities directly in controllers, violating Layer 1 architecture rules. Bob sets up Prisma ORM in `backend/models`. 
+                            <strong>Conflict Reasoning (Ollama + Local Architecture):</strong> Alice adds pg-client utilities directly in controllers, violating Layer 1 architecture rules. Bob sets up Prisma ORM in `backend/models`. 
                             <span class="recommendation">Recommendation: Merge Bob (PR #42) first, then rewrite Alice (PR #41) to use Prisma model layer.</span>
                         </div>
                     </div>
@@ -272,7 +356,7 @@
                 </div>
             </article>
 
-            <!-- 4. SKILL UPDATER (Amber) -->
+            <!-- 5. SKILL UPDATER (Amber) -->
             <article class="card card-updater" id="card-updater">
                 <div class="card-header">
                     <div class="header-title">
@@ -281,7 +365,7 @@
                     </div>
                     <span class="badge badge-updater">KNOWLEDGE EVOLUTION</span>
                 </div>
-                <p class="card-desc">Processes Discord developer discussions, gap logs, and staleness logs. Groups them semantically using BERTopic to generate Git patches that update Skills Core.</p>
+                <p class="card-desc">Processes Discord conversations, gap logs, and staleness logs. Groups them semantically via BERTopic to generate Git patches that update Per-Repository Skills.</p>
                 
                 <div class="updater-simulator">
                     <div class="pipeline-flow">
@@ -308,7 +392,7 @@
                             <div class="step-icon"><i class="fa-solid fa-file-pen"></i></div>
                             <div class="step-info">
                                 <h5>3. Auto-Patch Apply</h5>
-                                <p id="updater-patch-info">Git-backed commit</p>
+                                <p id="updater-patch-info">Git-backed repo update</p>
                             </div>
                         </div>
                     </div>
@@ -338,6 +422,65 @@
                 <div class="log-line system-log">[SYSTEM] AOSSIE Skill Ecosystem Simulation initialized. Select a scenario above to trace data flows.</div>
             </div>
         </footer>
+    </div>
+
+    <!-- User Guide Modal Overlay -->
+    <div class="guide-modal-overlay" id="guide-modal" style="display: none;">
+        <div class="guide-modal">
+            <div class="guide-modal-header">
+                <h2><i class="fa-solid fa-compass"></i> AOSSIE Skills Ecosystem Simulator Guide</h2>
+                <button class="close-guide-btn" id="btn-close-guide"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="guide-modal-body">
+                <div class="guide-intro">
+                    <p>Welcome to the <strong>AOSSIE Skills Ecosystem Simulator</strong>!</p>
+                    <p>This is a scalable, end-to-end repository governance system designed to ensure zero knowledge loss. It automatically catches insights from developer discussions to update repository skill files, runs community bots to resolve contributor questions, and displays a dashboard that highlights conflict warnings, suggested replies for ambiguous contributor PRs, and recommended merge sequences. If any knowledge is missing, it logs a gap signal to capture it later.</p>
+                    <p><strong>🔒 Local-First, Private & Scalable:</strong> Tested on servers with over 8,000+ members, the entire system is free, open-source, and runs fully on local LLMs—meaning zero info leaks, absolute data privacy, and zero SaaS costs, all while keeping a human in the loop.</p>
+                </div>
+                
+                <div class="guide-section">
+                    <h3><i class="fa-solid fa-cubes"></i> Core Architecture</h3>
+                    <div class="architecture-grid">
+                        <div class="arch-box">
+                            <span class="arch-tag tag-repo"><i class="fa-solid fa-folder-tree"></i> Per-Repository Customization</span>
+                            <p>Local config files (<code>.agent/</code> and <code>AGENTS.md</code>) unique to each project. They store setup, testing, and architecture boundaries to resolve 90% of contributor queries locally.</p>
+                        </div>
+                        <div class="arch-box">
+                            <span class="arch-tag tag-core"><i class="fa-solid fa-database"></i> Organization-Wide Skills Core</span>
+                            <p>Global, shared skills (such as AI Policy & onboarding flows) that remain consistent across all repositories, synchronized via Git Subtrees.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h3><i class="fa-solid fa-triangle-exclamation"></i> Real-World Challenges Solved</h3>
+                    <div class="challenges-list" style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem;">
+                        <div><strong>1. Unstructured AI Contributions:</strong> Prevents generic AI tools from suggesting incorrect code or violating project size/design limits.</div>
+                        <div><strong>2. Repetitive Queries:</strong> Instantly answers developer FAQs about setup, formatting, and onboarding.</div>
+                        <div><strong>3. Ephemeral Knowledge Loss:</strong> Automatically captures maintainer decisions discussed in Discord threads into Git-tracked documentation.</div>
+                        <div><strong>4. PR Merge Overhead:</strong> Clusters open PRs and flags code conflicts, drawing an optimal merge DAG.</div>
+                        <div><strong>5. Review Delays:</strong> Solves reviewer bottlenecks for sub-projects that lack dedicated maintainers.</div>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h3><i class="fa-solid fa-gears"></i> Core Ecosystem Modules</h3>
+                    <div class="modules-grid" style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem;">
+                        <div class="module-item"><strong>Skill Bot:</strong> Discord assistant that intercepts contributor queries, runs semantic vector searches against local/global skills, and logs knowledge gaps for maintainers.</div>
+                        <div class="module-item"><strong>PR Dashboard:</strong> Local developer dashboard that clusters open Pull Requests, injects skill rules, and checks local code boundaries to render a Conflict DAG.</div>
+                        <div class="module-item"><strong>Skill Updater:</strong> Background pipeline that semantically clusters developer discussions using BERTopic to draft Git patches updating the codebase skills.</div>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h3><i class="fa-solid fa-play"></i> Running the Simulation</h3>
+                    <p>Select a scenario at the top (<strong>A, B, or C</strong>) and click <strong>Trigger Step</strong> or <strong>Auto-Play</strong> to watch data flows trace in real-time between Per-Repository Skills, Skills Core, Skill Bot, PR Dashboard, and the Skill Updater.</p>
+                </div>
+            </div>
+            <div class="guide-modal-footer">
+                <button class="btn btn-primary" id="btn-start-guide">Got It, Let's Play!</button>
+            </div>
+        </div>
     </div>
 
     <script src="app.js"></script>

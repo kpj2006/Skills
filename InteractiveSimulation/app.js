@@ -1,6 +1,4 @@
-/* AOSSIE Skill Ecosystem Simulation Logic */
-
-// --- 1. Mock Skills Core File Data ---
+// --- 1. Mock Skills File Data ---
 const SETUP_TEMPLATE = `# Project Setup & Local Development
 
 ## Prerequisites
@@ -14,10 +12,10 @@ const SETUP_TEMPLATE = `# Project Setup & Local Development
 4. Run migrations: npx prisma migrate dev
 5. Run dev server: npm run dev`;
 
-const MOCK_FILES = {
+const MOCK_FILES_REPO = {
     architecture: {
         path: ".agent/core/architecture.md",
-        content: `# Core Project Architecture
+        content: `# Core Project Architecture (Per-Repo Context)
 
 This repository follows a modular structure:
 - **Frontend:** /frontend - React Single Page App
@@ -31,7 +29,7 @@ This repository follows a modular structure:
     },
     "edge-cases": {
         path: ".agent/core/edge-cases.md",
-        content: `# Edge Cases & Agent Lessons Learned
+        content: `# Edge Cases & Agent Lessons (Per-Repo Context)
 
 ## 🔴 Critical - Will Break Things
 - **Function Signatures:** If you change any function inside 'utils/', you MUST update all callers.
@@ -47,7 +45,7 @@ This repository follows a modular structure:
     },
     testing: {
         path: ".agent/instructions/testing.md",
-        content: `# Testing Strategy & Commands
+        content: `# Testing Strategy & Commands (Per-Repo Context)
 
 ## Test Commands
 - Run all tests: npm test
@@ -58,14 +56,57 @@ This repository follows a modular structure:
 - Every new feature or bug fix MUST include unit tests.
 - Test files must mirror source paths.`
     },
+    operational: {
+        path: ".agent/info/operational-data.md",
+        content: `# Operational Data (Per-Repo Context)
+
+## Service Endpoints
+- Production: https://app.aossie.org
+- Discord Invite: https://discord.gg/hjUhu33uAn
+
+## Maintainers & Mentors
+- Lead Maintainer: @kpj2006 (Discord: @kpj2006)
+
+## Message Templates
+- Post in #development after creating PR:
+  "@maintainers I have raised PR #[number]. Please review."`
+    }
+};
+
+const MOCK_FILES_CORE = {
     policy: {
         path: "skills/GIT-DIS-AIPolicy/SKILL.md",
-        content: `# GIT-DIS-AIPolicy — Agent Behavioral Controller
+        content: `# GIT-DIS-AIPolicy — Agent Behavioral Controller (Org-Wide)
 
-This skill governs contributor AI agent behavior.
+This skill governs contributor AI agent behavior globally.
 - **Blind Issue Scan Guard:** AI agents must ABORT unguided issue generation to prevent repo spam.
 - **Already-Assigned Issues Check:** Before work starts, check GitHub issues board to prevent PR conflicts.
 - **AI Disclosure:** Add disclosure tag to all AI-assisted PR descriptions.`
+    },
+    onboarding: {
+        path: "skills/contributor-onboarding/SKILL.md",
+        content: `# Contributor Onboarding Flow (Org-Wide)
+
+Ensures a structured onboarding process to minimize cognitive load.
+1. **Initialize Context:** Check local workspace for .agent/ files and load them.
+2. **Establish Policy:** Outline AI Policy rules and get confirmation.
+3. **Setup Check:** Ask contributor if project is built locally.`
+    },
+    mcp: {
+        path: "skills/mcp-integration/SKILL.md",
+        content: `# MCP Integration guidelines (Org-Wide)
+
+Explains how developer agents use MCP servers (GitHub & Puppeteer) to automate code changes, testing, and PR checks.
+- Use GitHub MCP for automated PR descriptions.
+- Use Puppeteer MCP for visual verification of local server URLs.`
+    },
+    glossary: {
+        path: "skills/GLOSSARY.md",
+        content: `# AOSSIE Skills Glossary (Org-Wide)
+
+- **Context Load:** The token memory cost of active prompts.
+- **Cognitive Load:** Mental effort required by human to trigger skills.
+- **Zero-Dependency Core:** Constraint keeping core library <10KB.`
     }
 };
 
@@ -94,17 +135,21 @@ const SCENARIOS = {
                 }
             },
             {
-                label: "Scan Skills Core",
+                label: "Scan Local Context (Per-Repo)",
                 run: (engine) => {
                     engine.addLog("Skill Bot: Computing similarity embedding for query...", "info");
-                    return engine.animatePacket("core", "bot", () => {
-                        engine.addLog("Skill Bot: Retrieved 'setup.md' and 'architecture.md' embeddings from Skills Core index.", "info");
+                    return engine.animatePacket("repo", "bot", () => {
+                        engine.addLog("Skill Bot: Retrieved 'setup.md' and 'architecture.md' from Per-Repository Skills.", "info");
                         engine.addLog("Skill Bot: Cosine similarity score = 0.45. Confidence threshold is 0.70.", "warn");
-                        engine.addLog("Skill Bot: Question is ambiguous (no production rules found in setup.md). Triggering ambiguity classifier...", "warn");
+                        engine.addLog("Skill Bot: Question is ambiguous (no production rules found in setup.md). Checking global policies...", "warn");
                         
-                        // Show Choice Prompt to user in UI
-                        document.getElementById("prompt-choices").style.display = "flex";
-                        engine.addLog("Skill Bot: Awaiting mentor decision flow step...", "system");
+                        // Briefly check core skills as well
+                        engine.animatePacket("core", "bot", () => {
+                            engine.addLog("Skill Bot: Scanned Skills Core for global AI policy compliance.", "info");
+                            // Show Choice Prompt to user in UI
+                            document.getElementById("prompt-choices").style.display = "flex";
+                            engine.addLog("Skill Bot: Awaiting mentor decision flow step...", "system");
+                        });
                     });
                 }
             },
@@ -127,7 +172,7 @@ const SCENARIOS = {
                                 
                                 setTimeout(() => {
                                     engine.addLog("Skill Bot: Re-evaluating refined query: 'AWS App Runner setup'...", "info");
-                                    engine.simulateDiscordBotMsg("Found no specific deployment skill for AWS RDS in Skills Core. However, general Docker containers run via AWS App Runner. Let me write this query to the Gap Logs.");
+                                    engine.simulateDiscordBotMsg("Found no specific deployment skill in Per-Repository Skills. general Docker containers run via AWS App Runner. Let me write this query to the Gap Logs.");
                                     engine.addLog("Skill Bot: Confirmed knowledge gap. Logging GAP SIGNAL to gap_log.json.", "warn");
                                     
                                     // Send gap packet to updater
@@ -141,7 +186,7 @@ const SCENARIOS = {
                         });
                     } else {
                         // Direct LLM fallback and Gap logging
-                        engine.simulateDiscordBotMsg("I couldn't find deployment instructions in our Skills Core. Falling back to general LLM guidelines. [Warning: General advice only. Setup may differ.]");
+                        engine.simulateDiscordBotMsg("I couldn't find deployment instructions in our Per-Repository Skills. Falling back to general LLM guidelines. [Warning: General advice only.]");
                         engine.addLog("Skill Bot: confidence < 0.70. Emitted fallback response.", "warn");
                         engine.addLog("Skill Bot: Emitting GAP SIGNAL to gap_log.json...", "warn");
                         
@@ -170,12 +215,17 @@ const SCENARIOS = {
                 }
             },
             {
-                label: "Inject Skills Core Context",
+                label: "Inject Per-Repo context & Core Rules",
                 run: (engine) => {
-                    engine.addLog("PR Dashboard: Querying ChromaDB vector store of Skills Core...", "info");
-                    return engine.animatePacket("core", "dash", () => {
-                        engine.addLog("PR Dashboard: Matched and injected context from '.agent/core/architecture.md' (rules on Prisma/DB models).", "info");
-                        engine.addLog("PR Dashboard: Running local Ollama inference on conflict analysis...", "info");
+                    engine.addLog("PR Dashboard: Querying ChromaDB index of local Per-Repository Skills...", "info");
+                    return engine.animatePacket("repo", "dash", () => {
+                        engine.addLog("PR Dashboard: Matched and injected context from local '.agent/core/architecture.md' (rules on Prisma/DB models).", "info");
+                        engine.addLog("PR Dashboard: Cross-referencing Org-Wide Skills Core for AI Policies...", "info");
+                        
+                        engine.animatePacket("core", "dash", () => {
+                            engine.addLog("PR Dashboard: Checked compliance with GIT-DIS-AIPolicy.", "success");
+                            engine.addLog("PR Dashboard: Running local Ollama inference on conflict analysis...", "info");
+                        });
                     });
                 }
             },
@@ -186,11 +236,11 @@ const SCENARIOS = {
                     document.getElementById("dag-pr-41").classList.add("active-evaluation");
                     document.getElementById("dag-pr-42").classList.add("active-evaluation");
                     
-                    engine.addLog("PR Dashboard: Semantic conflict found. PR #41 bypasses the Prisma model layer specified in architecture.md.", "warn");
-                    engine.addLog("PR Dashboard: Generated conflict DAG html report.", "success");
+                    engine.addLog("PR Dashboard: Semantic conflict found. PR #41 bypasses the Prisma model layer specified in local architecture.md.", "warn");
+                    engine.addLog("PR Dashboard: Generated conflict DAG HTML report.", "success");
                     
                     // Emitting Staleness signal
-                    engine.addLog("PR Dashboard: Stale Skill detected (PR #42 introduces node 20 & npm 10 engines which are undocumented in setup.md). Emitting STALENESS SIGNAL to Skill Updater.", "warn");
+                    engine.addLog("PR Dashboard: Stale Skill detected (PR #42 introduces Node 20 engine undocumented in setup.md). Emitting STALENESS SIGNAL.", "warn");
                     
                     return engine.animatePacket("dash", "updater", () => {
                         engine.addLog("Skill Updater: Received STALENESS SIGNAL: {'file': '.agent/instructions/setup.md', 'type': 'outdated node engine'}", "success");
@@ -203,7 +253,7 @@ const SCENARIOS = {
     },
     c: {
         name: "Discussion to Update Loop",
-        description: "BERTopic Semantic clustering on developer chats/logs to patch Skills Core in Git.",
+        description: "BERTopic Semantic clustering on developer chats/logs to patch Per-Repo Skills in Git.",
         steps: [
             {
                 label: "Poll Signals & Chats",
@@ -250,10 +300,10 @@ index a3f821d..b59ec42 100644
 @@ -9,4 +9,5 @@
   - Node.js 18+ (Node 20 recommended)
   - Docker & Docker Compose
- +- AWS App Runner client (optional for production deployments)
+ + - AWS App Runner client (optional for production deployments)
  
   ## Local Development Setup`;
- 
+
                     diffText.textContent = patchStr;
                     engine.addLog("Skill Updater: Generated JSON git-patch structure.", "success");
                     engine.setUpdaterStepActive("patch", "Patch Ready");
@@ -261,15 +311,15 @@ index a3f821d..b59ec42 100644
                 }
             },
             {
-                label: "Apply Patch to Skills Core",
+                label: "Apply Patch to Per-Repo Skills",
                 run: (engine) => {
-                    engine.addLog("Skill Updater: Executing skill_patcher.py on local Skills Core workspace...", "info");
+                    engine.addLog("Skill Updater: Executing skill_patcher.py on local repository workspace...", "info");
                     
-                    return engine.animatePacket("updater", "core", () => {
-                        engine.addLog("Skills Core: Patch applied successfully in Git. Created commit 'docs: update setup instructions node version & AWS context'.", "success");
+                    return engine.animatePacket("updater", "repo", () => {
+                        engine.addLog("Per-Repository Skills: Patch applied successfully in Git. Created commit 'docs: update setup instructions node version & AWS context'.", "success");
                         
-                        // Dynamically update Skills Core file Explorer content!
-                        MOCK_FILES.setup.content = `# Project Setup & Local Development
+                        // Dynamically update Per-Repo setup.md mock content!
+                        MOCK_FILES_REPO.setup.content = `# Project Setup & Local Development
 
 ## Prerequisites
 - Node.js 18+ (Node 20 recommended)
@@ -283,18 +333,18 @@ index a3f821d..b59ec42 100644
 4. Run migrations: npx prisma migrate dev
 5. Run dev server: npm run dev`;
 
-                        // If "setup" is the active tab in Skills Core card, update editor body with green highlights
-                        const activeFile = document.querySelector(".tree-item.active").getAttribute("data-file");
+                        // Check if setup is active tab in Repo card, update editor body
+                        const activeFile = document.querySelector("#file-tree-repo .tree-item.active")?.getAttribute("data-file");
                         if (activeFile === "setup") {
                             renderFile("setup", true);
                         } else {
                             // Select setup file to show update
-                            const setupTreeItem = document.querySelector(".tree-item[data-file='setup']");
+                            const setupTreeItem = document.querySelector("#file-tree-repo .tree-item[data-file='setup']");
                             setupTreeItem.click();
                         }
                         
-                        engine.addLog("Ecosystem Loop Completed! Skills Core is now updated. Future bot replies and PR reviews will leverage this new context.", "success");
-                        engine.setCardActive("core", true);
+                        engine.addLog("Ecosystem Loop Completed! Per-Repository Skills are now updated. Future bot replies and PR reviews will leverage this new context.", "success");
+                        engine.setCardActive("repo", true);
                     });
                 }
             }
@@ -330,6 +380,7 @@ class SimulationEngine {
 
     setCardActive(cardId, isActive) {
         const card = document.getElementById(`card-${cardId}`);
+        if (!card) return;
         if (isActive) {
             card.classList.add("active-glow");
         } else {
@@ -338,11 +389,11 @@ class SimulationEngine {
     }
 
     clearAllGlows() {
-        ['core', 'bot', 'dash', 'updater'].forEach(id => this.setCardActive(id, false));
+        ['repo', 'core', 'bot', 'dash', 'updater'].forEach(id => this.setCardActive(id, false));
     }
 
     focusCards(cardIds) {
-        const allIds = ['core', 'bot', 'dash', 'updater'];
+        const allIds = ['repo', 'core', 'bot', 'dash', 'updater'];
         allIds.forEach(id => {
             const card = document.getElementById(`card-${id}`);
             if (!card) return;
@@ -357,7 +408,7 @@ class SimulationEngine {
     }
 
     clearFocus() {
-        const allIds = ['core', 'bot', 'dash', 'updater'];
+        const allIds = ['repo', 'core', 'bot', 'dash', 'updater'];
         allIds.forEach(id => {
             const card = document.getElementById(`card-${id}`);
             if (card) {
@@ -367,7 +418,7 @@ class SimulationEngine {
         });
         
         // Clear active flow on paths
-        const paths = ['core-bot', 'core-dash', 'bot-updater', 'dash-updater', 'updater-core'];
+        const paths = ['repo-bot', 'core-bot', 'repo-dash', 'core-dash', 'bot-updater', 'dash-updater', 'updater-repo', 'updater-core'];
         paths.forEach(p => {
             const path = document.getElementById(`path-${p}`);
             if (path) path.classList.remove("active-flow");
@@ -401,7 +452,7 @@ class SimulationEngine {
         this.setUpdaterStepActive("", "");
         document.getElementById("updater-input-src").textContent = "Idle. Awaiting signal...";
         document.getElementById("updater-cluster-info").textContent = "BERTopic Online Model";
-        document.getElementById("updater-patch-info").textContent = "Git-backed commit";
+        document.getElementById("updater-patch-info").textContent = "Git-backed repo update";
         document.getElementById("patch-preview-container").style.display = "none";
     }
 
@@ -488,7 +539,7 @@ class SimulationEngine {
                 <div class="avatar bot-avatar"><i class="fa-solid fa-robot"></i></div>
                 <div class="msg-content">
                     <div class="author-name">SkillBot <span class="bot-badge">BOT</span></div>
-                    <div class="msg-text">Welcome! Let me check the Skills Core context for setup steps...</div>
+                    <div class="msg-text">Welcome! Let me check the local repository context for setup steps...</div>
                 </div>
             </div>
         `;
@@ -564,28 +615,33 @@ const engine = new SimulationEngine();
 
 // --- 4. Render file content helper ---
 function renderFile(fileKey, showAddedDiff = false) {
-    const file = MOCK_FILES[fileKey];
-    if (!file) return;
-
-    document.getElementById("editor-filename").textContent = file.path;
+    let file = MOCK_FILES_REPO[fileKey];
+    if (file) {
+        document.getElementById("editor-filename-repo").textContent = file.path;
+        const body = document.getElementById("editor-body-repo");
+        if (showAddedDiff && fileKey === 'setup') {
+            const lines = file.content.split('\n');
+            body.innerHTML = '';
+            lines.forEach(line => {
+                const lineSpan = document.createElement("span");
+                if (line.startsWith("+ ")) {
+                    lineSpan.className = "diff-added";
+                } else if (line.startsWith("- ")) {
+                    lineSpan.className = "diff-deleted";
+                }
+                lineSpan.textContent = line + '\n';
+                body.appendChild(lineSpan);
+            });
+        } else {
+            body.textContent = file.content;
+        }
+        return;
+    }
     
-    const body = document.getElementById("editor-body");
-    
-    if (showAddedDiff && fileKey === 'setup') {
-        // Show simulated diff highlights
-        const lines = file.content.split('\n');
-        body.innerHTML = '';
-        lines.forEach(line => {
-            const lineSpan = document.createElement("span");
-            if (line.startsWith("+ ")) {
-                lineSpan.className = "diff-added";
-            } else if (line.startsWith("- ")) {
-                lineSpan.className = "diff-deleted";
-            }
-            lineSpan.textContent = line + '\n';
-            body.appendChild(lineSpan);
-        });
-    } else {
+    file = MOCK_FILES_CORE[fileKey];
+    if (file) {
+        document.getElementById("editor-filename-core").textContent = file.path;
+        const body = document.getElementById("editor-body-core");
         body.textContent = file.content;
     }
 }
@@ -596,6 +652,7 @@ function updateConnections() {
     if (!canvas) return;
 
     const cards = {
+        repo: document.getElementById("card-repo"),
         core: document.getElementById("card-core"),
         bot: document.getElementById("card-bot"),
         dash: document.getElementById("card-dash"),
@@ -603,7 +660,7 @@ function updateConnections() {
     };
 
     // Make sure elements exist
-    if (!cards.core || !cards.bot || !cards.dash || !cards.updater) return;
+    if (!cards.repo || !cards.core || !cards.bot || !cards.dash || !cards.updater) return;
 
     const containerRect = document.querySelector(".app-container").getBoundingClientRect();
 
@@ -623,6 +680,7 @@ function updateConnections() {
     }
 
     const pts = {
+        repo: getConnectorPoints(cards.repo),
         core: getConnectorPoints(cards.core),
         bot: getConnectorPoints(cards.bot),
         dash: getConnectorPoints(cards.dash),
@@ -630,25 +688,36 @@ function updateConnections() {
     };
 
     // Calculate paths
-    // 1. Core -> Bot (Context read)
-    const dCoreBot = `M ${pts.core.right} ${pts.core.top + 50} H ${pts.bot.left}`;
+    // 1. Repo -> Bot (Local Context read)
+    const dRepoBot = `M ${pts.repo.right} ${pts.repo.top + 50} H ${pts.bot.left}`;
+    document.getElementById("path-repo-bot").setAttribute("d", dRepoBot);
+
+    // 2. Core -> Bot (Global Policy read - diagonal)
+    const dCoreBot = `M ${pts.core.right} ${pts.core.top + 30} L ${pts.bot.left} ${pts.bot.bottom - 30}`;
     document.getElementById("path-core-bot").setAttribute("d", dCoreBot);
 
-    // 2. Core -> Dash (Context injection)
-    const dCoreDash = `M ${pts.core.left + 50} ${pts.core.bottom} V ${pts.dash.top}`;
+    // 3. Repo -> Dash (Local Architecture boundaries read - diagonal)
+    const dRepoDash = `M ${pts.repo.right} ${pts.repo.bottom - 30} L ${pts.dash.left} ${pts.dash.top + 30}`;
+    document.getElementById("path-repo-dash").setAttribute("d", dRepoDash);
+
+    // 4. Core -> Dash (Global Policy read)
+    const dCoreDash = `M ${pts.core.right} ${pts.core.top + 50} H ${pts.dash.left}`;
     document.getElementById("path-core-dash").setAttribute("d", dCoreDash);
 
-    // 3. Bot -> Updater (Gap signals)
-    const dBotUpdater = `M ${pts.bot.right - 50} ${pts.bot.bottom} V ${pts.updater.top}`;
+    // 5. Bot -> Updater (Gap signals)
+    const dBotUpdater = `M ${pts.bot.right} ${pts.bot.top + 50} L ${pts.updater.left} ${pts.updater.top + 80}`;
     document.getElementById("path-bot-updater").setAttribute("d", dBotUpdater);
 
-    // 4. Dash -> Updater (Staleness signals)
-    const dDashUpdater = `M ${pts.dash.right} ${pts.dash.bottom - 50} H ${pts.updater.left}`;
+    // 6. Dash -> Updater (Staleness signals)
+    const dDashUpdater = `M ${pts.dash.right} ${pts.dash.top + 50} L ${pts.updater.left} ${pts.updater.bottom - 80}`;
     document.getElementById("path-dash-updater").setAttribute("d", dDashUpdater);
 
-    // 5. Updater -> Core (Sync patch)
-    // Draw a diagonal curving path around components
-    const dUpdaterCore = `M ${pts.updater.left + 30} ${pts.updater.bottom} C ${pts.updater.left - 100} ${pts.updater.bottom + 80}, ${pts.dash.left - 80} ${pts.dash.bottom + 80}, ${pts.core.left} ${pts.core.bottom - 30}`;
+    // 7. Updater -> Repo (Sync patch back to local repo)
+    const dUpdaterRepo = `M ${pts.updater.left + 20} ${pts.updater.top} C ${pts.bot.right - 20} ${pts.bot.top - 60}, ${pts.repo.right + 60} ${pts.repo.top - 40}, ${pts.repo.right} ${pts.repo.top + 30}`;
+    document.getElementById("path-updater-repo").setAttribute("d", dUpdaterRepo);
+
+    // 8. Updater -> Core (Sync patch to global - optional/dashed)
+    const dUpdaterCore = `M ${pts.updater.left + 20} ${pts.updater.bottom} C ${pts.dash.right - 20} ${pts.dash.bottom + 60}, ${pts.core.right + 60} ${pts.core.bottom + 40}, ${pts.core.right} ${pts.core.bottom - 30}`;
     document.getElementById("path-updater-core").setAttribute("d", dUpdaterCore);
 
     connectionsCalculated = true;
@@ -656,13 +725,24 @@ function updateConnections() {
 
 // --- 6. Event Listeners & Bootstrapping ---
 
-// File explorer click handler
-document.getElementById("file-tree").addEventListener("click", (e) => {
+// Local Repo File explorer click handler
+document.getElementById("file-tree-repo").addEventListener("click", (e) => {
     const item = e.target.closest(".tree-item");
     if (!item) return;
 
-    // Toggle active state
-    document.querySelectorAll(".tree-item").forEach(el => el.classList.remove("active"));
+    document.querySelectorAll("#file-tree-repo .tree-item").forEach(el => el.classList.remove("active"));
+    item.classList.add("active");
+
+    const fileKey = item.getAttribute("data-file");
+    renderFile(fileKey);
+});
+
+// Core File explorer click handler
+document.getElementById("file-tree-core").addEventListener("click", (e) => {
+    const item = e.target.closest(".tree-item");
+    if (!item) return;
+
+    document.querySelectorAll("#file-tree-core .tree-item").forEach(el => el.classList.remove("active"));
     item.classList.add("active");
 
     const fileKey = item.getAttribute("data-file");
@@ -705,13 +785,15 @@ function resetSimulation() {
     scenarioStep = 0;
     
     // Reset file edits
-    MOCK_FILES.setup.content = SETUP_TEMPLATE;
+    MOCK_FILES_REPO.setup.content = SETUP_TEMPLATE;
 
     renderFile("architecture");
+    renderFile("policy");
     
     // Reset active states
     document.querySelectorAll(".tree-item").forEach(el => el.classList.remove("active"));
-    document.querySelector(".tree-item[data-file='architecture']").classList.add("active");
+    document.querySelector("#file-tree-repo .tree-item[data-file='architecture']").classList.add("active");
+    document.querySelector("#file-tree-core .tree-item[data-file='policy']").classList.add("active");
 
     engine.clearAllGlows();
     engine.resetDiscordMessages();
@@ -863,6 +945,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Initial bootstrapper
 window.addEventListener("load", () => {
     renderFile("architecture");
+    renderFile("policy");
     updateConnections();
     
     // Initial logs greeting
@@ -870,9 +953,29 @@ window.addEventListener("load", () => {
     engine.addLog("Ollama server online. Model: Llama3 (Inference) and nomic-embed-text (Embeddings) loaded locally.", "info");
     engine.addLog("BERTopic semantic model online.", "info");
     engine.addLog("Ready. Select Scenario A, B, or C to trace data pipelines.", "system");
+
+    // Open User Guide modal on first load
+    if (!localStorage.getItem("aossie_guide_seen")) {
+        document.getElementById("guide-modal").style.display = "flex";
+    }
 });
 
 // Window resize updates connection paths dynamically
 window.addEventListener("resize", () => {
     updateConnections();
+});
+
+// User Guide Modal Toggle Event Listeners
+document.getElementById("btn-toggle-guide").addEventListener("click", () => {
+    const modal = document.getElementById("guide-modal");
+    modal.style.display = (modal.style.display === "none" || modal.style.display === "") ? "flex" : "none";
+});
+
+document.getElementById("btn-close-guide").addEventListener("click", () => {
+    document.getElementById("guide-modal").style.display = "none";
+});
+
+document.getElementById("btn-start-guide").addEventListener("click", () => {
+    document.getElementById("guide-modal").style.display = "none";
+    localStorage.setItem("aossie_guide_seen", "true");
 });
