@@ -497,6 +497,12 @@ body {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    /* Reset button styles */
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
 }
 
 .tree-item:hover {
@@ -508,6 +514,11 @@ body {
     background: rgba(16, 185, 129, 0.08);
     color: var(--color-core);
     font-weight: 500;
+}
+
+.card-repo .tree-item.active {
+    background: rgba(59, 130, 246, 0.08);
+    color: var(--color-repo);
 }
 
 .file-editor {
@@ -759,6 +770,11 @@ body {
     cursor: pointer;
     transition: var(--transition-smooth);
     border-bottom: 2px solid transparent;
+    /* Reset button styles */
+    background: transparent;
+    border-left: none;
+    border-right: none;
+    border-top: none;
 }
 
 .dash-tab:hover {

@@ -760,8 +760,12 @@ document.querySelector(".dashboard-tabs").addEventListener("click", (e) => {
     const tab = e.target.closest(".dash-tab");
     if (!tab) return;
 
-    document.querySelectorAll(".dash-tab").forEach(el => el.classList.remove("active"));
+    document.querySelectorAll(".dash-tab").forEach(el => {
+        el.classList.remove("active");
+        el.setAttribute("aria-selected", "false");
+    });
     tab.classList.add("active");
+    tab.setAttribute("aria-selected", "true");
 
     const tabKey = tab.getAttribute("data-tab");
     if (tabKey === "dag") {
@@ -800,6 +804,21 @@ function resetSimulation() {
     document.querySelectorAll(".tree-item").forEach(el => el.classList.remove("active"));
     document.querySelector("#file-tree-repo .tree-item[data-file='architecture']").classList.add("active");
     document.querySelector("#file-tree-core .tree-item[data-file='policy']").classList.add("active");
+
+    // Reset dashboard tabs
+    document.querySelectorAll(".dash-tab").forEach(el => {
+        el.classList.remove("active");
+        el.setAttribute("aria-selected", "false");
+    });
+    const dagTab = document.getElementById("tab-dag");
+    if (dagTab) {
+        dagTab.classList.add("active");
+        dagTab.setAttribute("aria-selected", "true");
+    }
+    const panelDag = document.getElementById("panel-dag");
+    if (panelDag) panelDag.style.display = "flex";
+    const panelIsolated = document.getElementById("panel-isolated");
+    if (panelIsolated) panelIsolated.style.display = "none";
 
     engine.clearAllGlows();
     engine.resetDiscordMessages();

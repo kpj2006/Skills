@@ -167,21 +167,21 @@
                     <!-- File Explorer List -->
                     <div class="file-tree" id="file-tree-repo">
                         <div class="tree-header">Local Repo Context</div>
-                        <div class="tree-item active" data-file="architecture" data-tree="repo">
+                        <button type="button" class="tree-item active" data-file="architecture" data-tree="repo">
                             <i class="fa-solid fa-file-lines text-blue"></i> .agent/core/architecture.md
-                        </div>
-                        <div class="tree-item" data-file="edge-cases" data-tree="repo">
+                        </button>
+                        <button type="button" class="tree-item" data-file="edge-cases" data-tree="repo">
                             <i class="fa-solid fa-file-lines text-blue"></i> .agent/core/edge-cases.md
-                        </div>
-                        <div class="tree-item" data-file="setup" data-tree="repo">
+                        </button>
+                        <button type="button" class="tree-item" data-file="setup" data-tree="repo">
                             <i class="fa-solid fa-file-lines text-blue"></i> .agent/instructions/setup.md
-                        </div>
-                        <div class="tree-item" data-file="testing" data-tree="repo">
+                        </button>
+                        <button type="button" class="tree-item" data-file="testing" data-tree="repo">
                             <i class="fa-solid fa-file-lines text-blue"></i> .agent/instructions/testing.md
-                        </div>
-                        <div class="tree-item" data-file="operational" data-tree="repo">
+                        </button>
+                        <button type="button" class="tree-item" data-file="operational" data-tree="repo">
                             <i class="fa-solid fa-file-lines text-blue"></i> .agent/info/operational-data.md
-                        </div>
+                        </button>
                     </div>
                     <!-- File Editor Panel -->
                     <div class="file-editor">
@@ -206,18 +206,18 @@
                     <!-- File Explorer List -->
                     <div class="file-tree" id="file-tree-core">
                         <div class="tree-header">Org-Wide Core Skills</div>
-                        <div class="tree-item" data-file="policy" data-tree="core">
+                        <button type="button" class="tree-item" data-file="policy" data-tree="core">
                             <i class="fa-solid fa-file-shield text-green"></i> GIT-DIS-AIPolicy/SKILL.md
-                        </div>
-                        <div class="tree-item" data-file="onboarding" data-tree="core">
+                        </button>
+                        <button type="button" class="tree-item" data-file="onboarding" data-tree="core">
                             <i class="fa-solid fa-file-shield text-green"></i> onboarding/SKILL.md
-                        </div>
-                        <div class="tree-item" data-file="mcp" data-tree="core">
+                        </button>
+                        <button type="button" class="tree-item" data-file="mcp" data-tree="core">
                             <i class="fa-solid fa-file-shield text-green"></i> mcp-integration/SKILL.md
-                        </div>
-                        <div class="tree-item" data-file="glossary" data-tree="core">
+                        </button>
+                        <button type="button" class="tree-item" data-file="glossary" data-tree="core">
                             <i class="fa-solid fa-file-lines text-green"></i> GLOSSARY.md
-                        </div>
+                        </button>
                     </div>
                     <!-- File Editor Panel -->
                     <div class="file-editor">
@@ -283,11 +283,11 @@
                 <p class="card-desc">Queries local Per-Repository Skills to inject architectural boundaries, analyze open PRs, detect semantic conflicts, and signal staleness.</p>
                 
                 <div class="dashboard-simulator">
-                    <div class="dashboard-tabs">
-                        <div class="dash-tab active" data-tab="dag">Conflict DAG</div>
-                        <div class="dash-tab" data-tab="isolated">Isolated PRs</div>
+                    <div class="dashboard-tabs" role="tablist" aria-label="PR Analysis Views">
+                        <button type="button" class="dash-tab active" id="tab-dag" role="tab" aria-selected="true" aria-controls="panel-dag" data-tab="dag">Conflict DAG</button>
+                        <button type="button" class="dash-tab" id="tab-isolated" role="tab" aria-selected="false" aria-controls="panel-isolated" data-tab="isolated">Isolated PRs</button>
                     </div>
-                    <div class="tab-panel active" id="panel-dag">
+                    <div class="tab-panel active" id="panel-dag" role="tabpanel" aria-labelledby="tab-dag">
                         <div class="dag-container">
                             <div class="dag-node main-node">
                                 <div class="node-title">main branch</div>
@@ -313,7 +313,7 @@
                             <span class="recommendation">Recommendation: Merge Bob (PR #42) first, then rewrite Alice (PR #41) to use Prisma model layer.</span>
                         </div>
                     </div>
-                    <div class="tab-panel" id="panel-isolated" style="display: none;">
+                    <div class="tab-panel" id="panel-isolated" style="display: none;" role="tabpanel" aria-labelledby="tab-isolated">
                         <div class="isolated-list">
                             <div class="isolated-card">
                                 <div class="isolated-header">
