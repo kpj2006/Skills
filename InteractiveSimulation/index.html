@@ -7,7 +7,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="styles.css">
@@ -95,50 +95,137 @@
             <circle id="packet-updater-core" r="5" fill="#F59E0B" filter="url(#glow-updater)" style="display: none;"></circle>
         </svg>
 
-        <!-- Main Header -->
+        <!-- HERO SECTION: Problem Statement -->
+        <section class="hero-section">
+            <div class="hero-header">
+                <div class="hero-brand">
+                    <img src="../public/aossie-logo.svg" alt="AOSSIE Logo" class="hero-logo" onerror="this.src='https://raw.githubusercontent.com/kpj2006/Template-Repo/main/public/aossie-logo.svg'">
+                    <h1>AOSSIE Skill Ecosystem</h1>
+                </div>
+                <p class="hero-subtitle">Intelligent Governance for Teams That Learn</p>
+            </div>
+            
+            <div class="problem-section">
+                <h2>The Challenge</h2>
+                <p class="problem-intro">Teams struggle to maintain consistency, onboard contributors, and evolve their practices at scale.</p>
+                
+                <div class="problem-cards">
+                    <div class="problem-card">
+                        <div class="problem-icon"><i class="fa-solid fa-circle-question"></i></div>
+                        <h3>New Contributor Confusion</h3>
+                        <p>Contributors waste time asking the same questions repeatedly</p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon"><i class="fa-solid fa-code-branch"></i></div>
+                        <h3>Code Review Delays</h3>
+                        <p>Maintainers must manually check architectural boundaries in each PR</p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon"><i class="fa-solid fa-book"></i></div>
+                        <h3>Documentation Decay</h3>
+                        <p>Project rules become outdated as the codebase evolves</p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon"><i class="fa-solid fa-users"></i></div>
+                        <h3>Knowledge Silos</h3>
+                        <p>Critical context lives only in senior developers' heads</p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <h3>Risk of Breaking Changes</h3>
+                        <p>Subtle architectural violations slip through the cracks</p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon"><i class="fa-solid fa-chart-line"></i></div>
+                        <h3>No Learning System</h3>
+                        <p>Teams can&apos;t systematically capture and apply lessons learned</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="solution-intro">
+                <h2>The Solution: A Self-Evolving Ecosystem</h2>
+                <p>An intelligent system that captures team knowledge, answers contributor questions instantly, prevents architectural conflicts, and evolves with your team.</p>
+            </div>
+        </section>
+
+        <!-- Main Header (Navigation) -->
         <header class="app-header">
             <div class="brand">
-                <img src="../public/aossie-logo.svg" alt="AOSSIE Logo" class="brand-logo" onerror="this.src='https://raw.githubusercontent.com/kpj2006/Template-Repo/main/public/aossie-logo.svg'">
                 <div class="brand-text">
-                    <h1>AOSSIE Skill Ecosystem</h1>
-                    <p class="subtitle">Closed-Loop Interactive Agent Governance & Knowledge Simulation</p>
+                    <h1>How It Works</h1>
+                    <p class="subtitle">Three Key Components Working Together</p>
                 </div>
             </div>
             <div class="header-right">
                 <button class="btn btn-help" id="btn-toggle-guide">
-                    <i class="fa-solid fa-circle-question"></i> Show User Guide
+                    <i class="fa-solid fa-circle-question"></i> User Guide
                 </button>
                 <div class="system-status">
                     <div class="status-indicator">
                         <span class="status-dot pulsing"></span>
-                        <span class="status-text">SYSTEM SIMULATION RUNNING</span>
+                        <span class="status-text">LIVE DEMO</span>
                     </div>
                 </div>
             </div>
         </header>
 
+        <!-- Component Overview Section -->
+        <section class="components-overview">
+            <div class="component-card overview-card">
+                <div class="component-badge">01</div>
+                <i class="fa-solid fa-book component-icon icon-blue"></i>
+                <h3>Knowledge Hub</h3>
+                <p class="component-role">Captures project rules and team wisdom</p>
+                <p class="component-desc">Local Per-Repository Skills + Org-Wide Core Skills</p>
+                <div class="component-benefit">✓ Single source of truth for your team</div>
+            </div>
+            
+            <div class="component-card overview-card">
+                <div class="component-badge">02</div>
+                <i class="fa-brands fa-discord component-icon icon-purple"></i>
+                <h3>Smart Assistant</h3>
+                <p class="component-role">Answers questions instantly</p>
+                <p class="component-desc">AI-Powered Skill Bot</p>
+                <div class="component-benefit">✓ Contributors get guidance in real-time</div>
+            </div>
+            
+            <div class="component-card overview-card">
+                <div class="component-badge">03</div>
+                <i class="fa-solid fa-arrows-spin component-icon icon-amber"></i>
+                <h3>Evolution Engine</h3>
+                <p class="component-role">Keeps knowledge fresh</p>
+                <p class="component-desc">PR Analysis + Continuous Learning</p>
+                <div class="component-benefit">✓ System learns and improves over time</div>
+            </div>
+        </section>
+
         <!-- Simulation Scenario Controller -->
         <section class="simulation-controls">
-            <div class="control-label">
-                <i class="fa-solid fa-play"></i> Select Simulation Scenario:
+            <div class="control-header">
+                <h2><i class="fa-solid fa-play"></i> Try It Now</h2>
+                <p>Select a scenario to see the ecosystem in action</p>
             </div>
             <div class="scenario-buttons">
                 <button class="btn btn-scenario active" id="btn-scenario-a" data-scenario="a">
-                    <span class="scenario-number">Scenario A</span>
-                    <span class="scenario-name">Discord Chat & Gap Flow (Skill Bot)</span>
+                    <span class="scenario-number">Scenario 1</span>
+                    <span class="scenario-name">New Contributor Journey</span>
+                    <span class="scenario-desc">How the Smart Assistant guides contributors</span>
                 </button>
                 <button class="btn btn-scenario" id="btn-scenario-b" data-scenario="b">
-                    <span class="scenario-number">Scenario B</span>
-                    <span class="scenario-name">PR Analysis & Staleness Flow (PR Dashboard)</span>
+                    <span class="scenario-number">Scenario 2</span>
+                    <span class="scenario-name">Maintainer Review</span>
+                    <span class="scenario-desc">How conflicts are detected in code reviews</span>
                 </button>
                 <button class="btn btn-scenario" id="btn-scenario-c" data-scenario="c">
-                    <span class="scenario-number">Scenario C</span>
-                    <span class="scenario-name">Discussion to Update Loop (Skill Updater)</span>
+                    <span class="scenario-number">Scenario 3</span>
+                    <span class="scenario-name">Team Learning</span>
+                    <span class="scenario-desc">How the system captures and applies lessons</span>
                 </button>
             </div>
             <div class="control-actions">
                 <button class="btn btn-primary" id="btn-trigger-action">
-                    <i class="fa-solid fa-bolt"></i> Trigger Step
+                    <i class="fa-solid fa-bolt"></i> Next Step
                 </button>
                 <button class="btn btn-secondary" id="btn-autoplay">
                     <i class="fa-solid fa-play"></i> Auto-Play
@@ -149,19 +236,31 @@
             </div>
         </section>
 
+        <!-- Progress Indicator -->
+        <div class="progress-tracker" id="progress-tracker" style="display: none;">
+            <div class="progress-header">
+                <span class="progress-title" id="progress-title">Scenario Progress</span>
+                <span class="progress-count"><span id="progress-current">1</span> / <span id="progress-total">5</span></span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="step-indicators" id="step-indicators"></div>
+        </div>
+
         <!-- Main Dashboard Grid -->
-        <main class="dashboard-grid">
+        <main class="dashboard-grid" id="dashboard-grid">
             
-            <!-- 1. PER-REPOSITORY SKILLS (Blue/Teal) -->
+            <!-- 1. KNOWLEDGE HUB: PER-REPOSITORY SKILLS (Blue) -->
             <article class="card card-repo" id="card-repo">
                 <div class="card-header">
                     <div class="header-title">
                         <i class="fa-solid fa-folder-tree icon-repo"></i>
-                        <h2>Per-Repository Skills</h2>
+                        <h2>Project Rules</h2>
                     </div>
-                    <span class="badge badge-repo">LOCAL CONTEXT (.agent/)</span>
+                    <span class="badge badge-repo" id="badge-repo">LOCAL CONTEXT</span>
                 </div>
-                <p class="card-desc">Project-specific local context, rules, boundaries, and setup instructions. 90% of bot/PR tasks are resolved directly here.</p>
+                <p class="card-desc">Project-specific knowledge: architecture, setup, boundaries, and best practices</p>
                 
                 <div class="core-explorer">
                     <!-- File Explorer List -->
@@ -191,16 +290,16 @@
                 </div>
             </article>
 
-            <!-- 2. SKILLS CORE (Green) -->
+            <!-- 2. KNOWLEDGE HUB: SKILLS CORE (Green) -->
             <article class="card card-core" id="card-core">
                 <div class="card-header">
                     <div class="header-title">
                         <i class="fa-solid fa-database icon-core"></i>
-                        <h2>Skills Core</h2>
+                        <h2>Organization Playbook</h2>
                     </div>
-                    <span class="badge badge-core">ORG-WIDE SKILLS</span>
+                    <span class="badge badge-core" id="badge-core">ORG-WIDE SKILLS</span>
                 </div>
-                <p class="card-desc">Global organization-wide skills (like AI Policy & onboarding flows). Unified and synced to repos via Git Subtrees.</p>
+                <p class="card-desc">Organization-wide knowledge: policies, onboarding flows, and governance patterns</p>
                 
                 <div class="core-explorer">
                     <!-- File Explorer List -->
@@ -227,16 +326,16 @@
                 </div>
             </article>
 
-            <!-- 3. SKILL BOT (Purple) -->
+            <!-- 3. SMART ASSISTANT: SKILL BOT (Purple) -->
             <article class="card card-bot" id="card-bot">
                 <div class="card-header">
                     <div class="header-title">
                         <i class="fa-brands fa-discord icon-bot"></i>
-                        <h2>Skill Bot</h2>
+                        <h2>Smart Assistant</h2>
                     </div>
-                    <span class="badge badge-bot">DISCORD ASSISTANT</span>
+                    <span class="badge badge-bot" id="badge-bot">AI GUIDE</span>
                 </div>
-                <p class="card-desc">Grounded in local Per-Repository Skills. Intercepts contributor questions, asks clarifying questions, and emits Gap Signals when local rules are insufficient.</p>
+                <p class="card-desc">Reads project knowledge and helps contributors instantly. Learns what it can&apos;t answer.</p>
                 
                 <div class="discord-simulator">
                     <div class="discord-header">
@@ -271,16 +370,16 @@
                 </div>
             </article>
 
-            <!-- 4. PR DASHBOARD (Blue) -->
+            <!-- 4. EVOLUTION ENGINE: PR DASHBOARD (Cyan) -->
             <article class="card card-dash" id="card-dash">
                 <div class="card-header">
                     <div class="header-title">
                         <i class="fa-solid fa-code-pull-request icon-dash"></i>
-                        <h2>PR Dashboard</h2>
+                        <h2>Code Review Guard</h2>
                     </div>
-                    <span class="badge badge-dash">MAINTAINER SYSTEM</span>
+                    <span class="badge badge-dash" id="badge-dash">MAINTAINER SYSTEM</span>
                 </div>
-                <p class="card-desc">Queries local Per-Repository Skills to inject architectural boundaries, analyze open PRs, detect semantic conflicts, and signal staleness.</p>
+                <p class="card-desc">Analyzes pull requests against project rules, detects conflicts, and protects architectural boundaries.</p>
                 
                 <div class="dashboard-simulator">
                     <div class="dashboard-tabs" role="tablist" aria-label="PR Analysis Views">
@@ -297,168 +396,119 @@
                             <div class="dag-connector-v"></div>
                             
                             <div class="dag-row">
-                                <div class="dag-node pr-node conflict" id="dag-pr-41">
-                                    <div class="node-title">PR #41: Add Postgres</div>
-                                    <div class="node-meta">Author: Alice</div>
+                                <div class="dag-node pr-node">
+                                    <div class="node-title">PR #123</div>
+                                    <div class="node-meta">Frontend Change</div>
                                 </div>
-                                <div class="dag-node-h-connect text-red"><i class="fa-solid fa-arrows-left-right-to-line"></i> Semantic Conflict</div>
-                                <div class="dag-node pr-node conflict" id="dag-pr-42">
-                                    <div class="node-title">PR #42: Database ORM</div>
-                                    <div class="node-meta">Author: Bob</div>
+                                <div class="dag-node pr-node conflict">
+                                    <div class="node-title">PR #124</div>
+                                    <div class="node-meta">Arch Violation ⚠️</div>
+                                </div>
+                                <div class="dag-node pr-node">
+                                    <div class="node-title">PR #125</div>
+                                    <div class="node-meta">Backend Fix</div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="conflict-explanation" id="conflict-explanation">
-                            <strong>Conflict Reasoning (Ollama + Local Architecture):</strong> Alice adds pg-client utilities directly in controllers, violating Layer 1 architecture rules. Bob sets up Prisma ORM in `backend/models`. 
-                            <span class="recommendation">Recommendation: Merge Bob (PR #42) first, then rewrite Alice (PR #41) to use Prisma model layer.</span>
                         </div>
                     </div>
-                    <div class="tab-panel" id="panel-isolated" style="display: none;" role="tabpanel" aria-labelledby="tab-isolated">
-                        <div class="isolated-list">
-                            <div class="isolated-card">
-                                <div class="isolated-header">
-                                    <h4>PR #45: Fix Landing Page CSS alignment</h4>
-                                    <span class="safe-badge"><i class="fa-solid fa-circle-check"></i> Safe to Merge</span>
+                    <div class="tab-panel" id="panel-isolated" role="tabpanel" aria-labelledby="tab-isolated">
+                        <div class="pr-analysis">
+                            <div class="pr-item healthy">
+                                <div class="pr-status">✓ Compatible</div>
+                                <div class="pr-info">
+                                    <strong>PR #123: Add dark mode support</strong>
+                                    <p>✓ Follows architecture boundaries</p>
                                 </div>
-                                <p>Simple CSS adjustment in UI component. Zero conflicts with open PRs.</p>
                             </div>
-                            <div class="isolated-card">
-                                <div class="isolated-header">
-                                    <h4>PR #48: Add Lint configuration rule</h4>
-                                    <span class="safe-badge"><i class="fa-solid fa-circle-check"></i> Safe to Merge</span>
+                            <div class="pr-item issue">
+                                <div class="pr-status">⚠ Conflict</div>
+                                <div class="pr-info">
+                                    <strong>PR #124: Refactor database layer</strong>
+                                    <p>✗ Violates separation of concerns rule</p>
                                 </div>
-                                <p>Updates static linters. No overlapping code logic.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </article>
 
-            <!-- 5. SKILL UPDATER (Amber) -->
+            <!-- 5. EVOLUTION ENGINE: SKILL UPDATER (Amber) -->
             <article class="card card-updater" id="card-updater">
                 <div class="card-header">
                     <div class="header-title">
                         <i class="fa-solid fa-arrows-spin icon-updater"></i>
-                        <h2>Skill Updater</h2>
+                        <h2>Learning Loop</h2>
                     </div>
-                    <span class="badge badge-updater">KNOWLEDGE EVOLUTION</span>
+                    <span class="badge badge-updater" id="badge-updater">CONTINUOUS EVOLUTION</span>
                 </div>
-                <p class="card-desc">Processes Discord conversations, gap logs, and staleness logs. Groups them semantically via BERTopic to generate Git patches that update Per-Repository Skills.</p>
+                <p class="card-desc">Learns from team decisions and discussions to continuously refine project knowledge.</p>
                 
-                <div class="updater-simulator">
-                    <div class="pipeline-flow">
-                        <!-- Step 1: Input Sources -->
-                        <div class="pipeline-step" id="step-poll">
-                            <div class="step-icon"><i class="fa-solid fa-arrows-down-to-people"></i></div>
-                            <div class="step-info">
-                                <h5>1. Fetch & Poll</h5>
-                                <p id="updater-input-src">Idle. Awaiting signal...</p>
+                <div class="updater-panel">
+                    <div class="learning-log" id="learning-log">
+                        <div class="log-entry">
+                            <div class="log-time">09:32 AM</div>
+                            <div class="log-event">
+                                <strong>Knowledge Gap Detected</strong>
+                                <p>Contributors asked about database setup 3 times today</p>
+                                <span class="log-badge">GAP SIGNAL</span>
                             </div>
                         </div>
-                        <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-                        <!-- Step 2: Topic Clustering -->
-                        <div class="pipeline-step" id="step-cluster">
-                            <div class="step-icon"><i class="fa-solid fa-tags"></i></div>
-                            <div class="step-info">
-                                <h5>2. Semantic Cluster</h5>
-                                <p id="updater-cluster-info">BERTopic Online Model</p>
-                            </div>
-                        </div>
-                        <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-                        <!-- Step 3: Git Patch Apply -->
-                        <div class="pipeline-step" id="step-patch">
-                            <div class="step-icon"><i class="fa-solid fa-file-pen"></i></div>
-                            <div class="step-info">
-                                <h5>3. Auto-Patch Apply</h5>
-                                <p id="updater-patch-info">Git-backed repo update</p>
+                        <div class="log-entry">
+                            <div class="log-time">09:45 AM</div>
+                            <div class="log-event">
+                                <strong>Learning Applied</strong>
+                                <p>Updated SETUP.md with database configuration guide</p>
+                                <span class="log-badge">UPDATED</span>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="patch-preview-container" style="display: none;" id="patch-preview-container">
-                        <div class="patch-header">Generated Git Diff Patch</div>
-                        <pre class="patch-diff" id="patch-diff-content">No active patches.</pre>
+                    <div class="learning-stats">
+                        <div class="stat">
+                            <div class="stat-label">Questions Answered</div>
+                            <div class="stat-value">47</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Gaps Identified</div>
+                            <div class="stat-value">8</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Updates Made</div>
+                            <div class="stat-value">5</div>
+                        </div>
                     </div>
                 </div>
             </article>
 
         </main>
 
-        <!-- Real-time Console Log / Under the Hood Execution Terminal -->
-        <footer class="console-section">
-            <div class="console-header">
-                <div class="console-title">
-                    <i class="fa-solid fa-terminal"></i>
-                    <h3>Ecosystem Under the Hood Console</h3>
-                </div>
-                <div class="console-controls">
-                    <span class="console-tag">ollama: nomic-embed-text & llama3</span>
-                    <button class="console-clear-btn" id="console-clear"><i class="fa-solid fa-trash-can"></i> Clear</button>
-                </div>
-            </div>
-            <div class="console-terminal" id="console-terminal">
-                <div class="log-line system-log">[SYSTEM] AOSSIE Skill Ecosystem Simulation initialized. Select a scenario above to trace data flows.</div>
+        <!-- Footer with additional info -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p>The AOSSIE Skill Ecosystem makes teams smarter by turning knowledge into action.</p>
+                <p class="footer-meta">Learn more at <a href="https://github.com/kpj2006/Skills" target="_blank">github.com/kpj2006/Skills</a></p>
             </div>
         </footer>
-    </div>
 
-    <!-- User Guide Modal Overlay -->
-    <div class="guide-modal-overlay" id="guide-modal" style="display: none;">
-        <div class="guide-modal">
-            <div class="guide-modal-header">
-                <h2><i class="fa-solid fa-compass"></i> AOSSIE Skills Ecosystem Simulator Guide</h2>
-                <button class="close-guide-btn" id="btn-close-guide"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="guide-modal-body">
-                <div class="guide-intro">
-                    <p>Welcome to the <strong>AOSSIE Skills Ecosystem Simulator</strong>!</p>
-                    <p>This is a scalable, end-to-end repository governance system designed to ensure zero knowledge loss. It automatically catches insights from developer discussions to update repository skill files, runs community bots to resolve contributor questions, and displays a dashboard that highlights conflict warnings, suggested replies for ambiguous contributor PRs, and recommended merge sequences. If any knowledge is missing, it logs a gap signal to capture it later.</p>
-                    <p><strong>🔒 Local-First, Private & Scalable:</strong> Tested on servers with over 8,000+ members, the entire system is free, open-source, and runs fully on local LLMs—meaning zero info leaks, absolute data privacy, and zero SaaS costs, all while keeping a human in the loop.</p>
-                </div>
-                
+        <!-- User Guide Modal (initially hidden) -->
+        <div class="guide-modal" id="guide-modal" style="display: none;">
+            <div class="guide-content">
+                <button class="close-btn" id="close-guide">&times;</button>
+                <h2>How to Use This Simulator</h2>
                 <div class="guide-section">
-                    <h3><i class="fa-solid fa-cubes"></i> Core Architecture</h3>
-                    <div class="architecture-grid">
-                        <div class="arch-box">
-                            <span class="arch-tag tag-repo"><i class="fa-solid fa-folder-tree"></i> Per-Repository Customization</span>
-                            <p>Local config files (<code>.agent/</code> and <code>AGENTS.md</code>) unique to each project. They store setup, testing, and architecture boundaries to resolve 90% of contributor queries locally.</p>
-                        </div>
-                        <div class="arch-box">
-                            <span class="arch-tag tag-core"><i class="fa-solid fa-database"></i> Organization-Wide Skills Core</span>
-                            <p>Global, shared skills (such as AI Policy & onboarding flows) that remain consistent across all repositories, synchronized via Git Subtrees.</p>
-                        </div>
-                    </div>
+                    <h3>1. Understand the Components</h3>
+                    <p>The ecosystem has three core components that work together to manage team knowledge and help contributors.</p>
                 </div>
-
                 <div class="guide-section">
-                    <h3><i class="fa-solid fa-triangle-exclamation"></i> Real-World Challenges Solved</h3>
-                    <div class="challenges-list" style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem;">
-                        <div><strong>1. Unstructured AI Contributions:</strong> Prevents generic AI tools from suggesting incorrect code or violating project size/design limits.</div>
-                        <div><strong>2. Repetitive Queries:</strong> Instantly answers developer FAQs about setup, formatting, and onboarding.</div>
-                        <div><strong>3. Ephemeral Knowledge Loss:</strong> Automatically captures maintainer decisions discussed in Discord threads into Git-tracked documentation.</div>
-                        <div><strong>4. PR Merge Overhead:</strong> Clusters open PRs and flags code conflicts, drawing an optimal merge DAG.</div>
-                        <div><strong>5. Review Delays:</strong> Solves reviewer bottlenecks for sub-projects that lack dedicated maintainers.</div>
-                    </div>
+                    <h3>2. Select a Scenario</h3>
+                    <p>Choose from three realistic scenarios to see how the system helps your team.</p>
                 </div>
-
                 <div class="guide-section">
-                    <h3><i class="fa-solid fa-gears"></i> Core Ecosystem Modules</h3>
-                    <div class="modules-grid" style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem;">
-                        <div class="module-item"><strong>Skill Bot:</strong> Discord assistant that intercepts contributor queries, runs semantic vector searches against local/global skills, and logs knowledge gaps for maintainers.</div>
-                        <div class="module-item"><strong>PR Dashboard:</strong> Local developer dashboard that clusters open Pull Requests, injects skill rules, and checks local code boundaries to render a Conflict DAG.</div>
-                        <div class="module-item"><strong>Skill Updater:</strong> Background pipeline that semantically clusters developer discussions using BERTopic to draft Git patches updating the codebase skills.</div>
-                    </div>
+                    <h3>3. Watch It Live</h3>
+                    <p>Click "Next Step" to advance through the scenario, or "Auto-Play" to see the full flow.</p>
                 </div>
-
-                <div class="guide-section">
-                    <h3><i class="fa-solid fa-play"></i> Running the Simulation</h3>
-                    <p>Select a scenario at the top (<strong>A, B, or C</strong>) and click <strong>Trigger Step</strong> or <strong>Auto-Play</strong> to watch data flows trace in real-time between Per-Repository Skills, Skills Core, Skill Bot, PR Dashboard, and the Skill Updater.</p>
-                </div>
-            </div>
-            <div class="guide-modal-footer">
-                <button class="btn btn-primary" id="btn-start-guide">Got It, Let's Play!</button>
             </div>
         </div>
+
     </div>
 
     <script src="app.js"></script>
