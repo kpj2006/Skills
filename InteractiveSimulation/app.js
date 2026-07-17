@@ -712,37 +712,40 @@ function updateConnections() {
         updater: getConnectorPoints(cards.updater)
     };
 
-    // Calculate paths
-    // 1. Repo -> Bot (Local Context read)
-    const dRepoBot = `M ${pts.repo.right} ${pts.repo.top + 50} H ${pts.bot.left}`;
+    // Pentagon layout paths - components positioned at vertices
+    // Top row: Repo (left) -> Bot (center) -> Core (right)
+    // Bottom row: Dash (left) -> Updater (right)
+    
+    // 1. Repo -> Bot (Local Context read - horizontal)
+    const dRepoBot = `M ${pts.repo.right} ${pts.repo.y} Q ${(pts.repo.right + pts.bot.left) / 2} ${pts.repo.y - 80}, ${pts.bot.left} ${pts.bot.y}`;
     document.getElementById("path-repo-bot").setAttribute("d", dRepoBot);
 
-    // 2. Core -> Bot (Global Policy read - diagonal)
-    const dCoreBot = `M ${pts.core.right} ${pts.core.top + 30} L ${pts.bot.left} ${pts.bot.bottom - 30}`;
-    document.getElementById("path-core-bot").setAttribute("d", dCoreBot);
+    // 2. Bot -> Core (center to right - horizontal)
+    const dBotCore = `M ${pts.bot.right} ${pts.bot.y} Q ${(pts.bot.right + pts.core.left) / 2} ${pts.bot.y - 80}, ${pts.core.left} ${pts.core.y}`;
+    document.getElementById("path-core-bot").setAttribute("d", dBotCore);
 
-    // 3. Repo -> Dash (Local Architecture boundaries read - diagonal)
-    const dRepoDash = `M ${pts.repo.right} ${pts.repo.bottom - 30} L ${pts.dash.left} ${pts.dash.top + 30}`;
+    // 3. Repo -> Dash (left vertical edge - diagonal down)
+    const dRepoDash = `M ${pts.repo.x} ${pts.repo.bottom} L ${pts.dash.x} ${pts.dash.top}`;
     document.getElementById("path-repo-dash").setAttribute("d", dRepoDash);
 
-    // 4. Core -> Dash (Global Policy read)
-    const dCoreDash = `M ${pts.core.right} ${pts.core.top + 50} H ${pts.dash.left}`;
-    document.getElementById("path-core-dash").setAttribute("d", dCoreDash);
+    // 4. Core -> Updater (right vertical edge - diagonal down)
+    const dCoreUpdater = `M ${pts.core.x} ${pts.core.bottom} L ${pts.updater.x} ${pts.updater.top}`;
+    document.getElementById("path-core-dash").setAttribute("d", dCoreUpdater);
 
-    // 5. Bot -> Updater (Gap signals)
-    const dBotUpdater = `M ${pts.bot.right} ${pts.bot.top + 50} L ${pts.updater.left} ${pts.updater.top + 80}`;
-    document.getElementById("path-bot-updater").setAttribute("d", dBotUpdater);
+    // 5. Dash -> Updater (bottom edge - horizontal)
+    const dDashUpdater = `M ${pts.dash.right} ${pts.dash.y} L ${pts.updater.left} ${pts.updater.y}`;
+    document.getElementById("path-bot-updater").setAttribute("d", dDashUpdater);
 
-    // 6. Dash -> Updater (Staleness signals)
-    const dDashUpdater = `M ${pts.dash.right} ${pts.dash.top + 50} L ${pts.updater.left} ${pts.updater.bottom - 80}`;
-    document.getElementById("path-dash-updater").setAttribute("d", dDashUpdater);
+    // 6. Bot -> Updater (center to bottom right - diagonal)
+    const dBotUpdaterFlow = `M ${pts.bot.right} ${pts.bot.bottom} Q ${(pts.bot.right + pts.updater.left) / 2} ${(pts.bot.bottom + pts.updater.top) / 2 + 40}, ${pts.updater.left} ${pts.updater.top}`;
+    document.getElementById("path-dash-updater").setAttribute("d", dBotUpdaterFlow);
 
-    // 7. Updater -> Repo (Sync patch back to local repo)
-    const dUpdaterRepo = `M ${pts.updater.left + 20} ${pts.updater.top} C ${pts.bot.right - 20} ${pts.bot.top - 60}, ${pts.repo.right + 60} ${pts.repo.top - 40}, ${pts.repo.right} ${pts.repo.top + 30}`;
+    // 7. Updater -> Repo (bottom right to top left - long arc)
+    const dUpdaterRepo = `M ${pts.updater.left - 20} ${pts.updater.y} C ${pts.updater.x - 100} ${(pts.updater.y + pts.repo.y) / 2 + 80}, ${pts.repo.x + 100} ${pts.repo.y - 80}, ${pts.repo.x} ${pts.repo.top}`;
     document.getElementById("path-updater-repo").setAttribute("d", dUpdaterRepo);
 
-    // 8. Updater -> Core (Sync patch to global - optional/dashed)
-    const dUpdaterCore = `M ${pts.updater.left + 20} ${pts.updater.bottom} C ${pts.dash.right - 20} ${pts.dash.bottom + 60}, ${pts.core.right + 60} ${pts.core.bottom + 40}, ${pts.core.right} ${pts.core.bottom - 30}`;
+    // 8. Updater -> Core (bottom right to top right - arc)
+    const dUpdaterCore = `M ${pts.updater.right + 20} ${pts.updater.y} C ${pts.updater.x + 100} ${(pts.updater.y + pts.core.y) / 2 + 80}, ${pts.core.x + 100} ${pts.core.y - 80}, ${pts.core.x} ${pts.core.top}`;
     document.getElementById("path-updater-core").setAttribute("d", dUpdaterCore);
 
     connectionsCalculated = true;
