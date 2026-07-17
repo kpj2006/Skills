@@ -94,48 +94,31 @@ This is a scalable, end-to-end repository governance system designed to ensure z
 
 ```mermaid
 graph TD
-    subgraph Knowledge[Shared Knowledge Foundation]
-        SC[Skills Core: Org-Wide Markdown Skills]
-        PRC[Per-Repo Context: AGENTS.md & .agents]
-    end
+    %% Nodes
+    SC["Skills Core (Shared Foundation)<br><br>AGENTS.md + skills/ directory<br>(Maintainer-approved knowledge)"]
+    Contributors["Contributors"]
+    Maintainers["Maintainers"]
+    
+    SB["Skill Bot (Discord Assistant)<br><br>Answers contributor questions<br>using skills ➔ LLM fallback"]
+    PD["PR Dashboard (Merge Analysis)<br><br>Clusters PRs semantically,<br>injects skills context,<br>recommends merge order"]
+    SU["Skill Updater (Knowledge Evolution)<br><br>Watches Discord discussions<br>from maintainers ➔ generates<br>updates to skills/"]
 
-    subgraph Infra[Local-First AI Infrastructure]
-        Ollama[Local LLM: Ollama qwen2.5 / llama3]
-        Chroma[Local Vector DB: ChromaDB]
-    end
+    %% Edges
+    SC -- "Powers answers" --> SB
+    SC -- "Powers reasoning" --> PD
+    Contributors -- "Questions in Discord" --> SB
+    Maintainers -- "Reviews PRs with" --> PD
+    Maintainers -- "Technical discussions" --> SU
+    SB -- "Learns gaps" --> SU
+    PD -- "Flags stale skills" --> SU
+    SU -- "Updates" --> SC
 
-    SC --> Chroma
-    PRC --> Chroma
-
-    subgraph Modules[Ecosystem Modules]
-        SB[Skill Bot: Discord Assistant]
-        SU[Skill Updater: Knowledge Harvesting]
-        PD[PR Dashboard: Merge Conflict DAG]
-    end
-
-    %% Skill Bot Flows
-    Dev[Contributor] -- "Asks Setup FAQ" --> Discord[Discord Channel]
-    Discord --> SB
-    SB -- "Vector Search" --> Chroma
-    SB -- "Fallback/Prompting" --> Ollama
-    SB -- "Log Gap Signal" --> Gap[Gap Logs]
-
-    %% Skill Updater Flows
-    Discord -- "Maintainer Chat History" --> SU
-    Gap --> SU
-    SU -- "Semantic Cluster" --> BERTopic[BERTopic]
-    SU -- "Prompt Patches" --> Ollama
-    SU -- "Pull Request" --> SC
-
-    %% PR Dashboard Flows
-    GitHub[GitHub API/CLI] -- "Open Pull Requests" --> PD
-    PD -- "Context Retrieval" --> Chroma
-    PD -- "Inference & Logic" --> Ollama
-    PD -- "Generate Conflict DAG" --> HTML[HTML Report]
-
-    style Knowledge fill:#0F172A,stroke:#3B82F6,stroke-width:2px;
-    style Modules fill:#0F172A,stroke:#10B981,stroke-width:2px;
-    style Infra fill:#0F172A,stroke:#F59E0B,stroke-width:2px;
+    %% Style Classes
+    classDef yellowBox fill:#1E293B,stroke:#F59E0B,stroke-width:2px,color:#F8FAFC;
+    classDef purpleBox fill:#1E293B,stroke:#8B5CF6,stroke-width:2px,color:#F8FAFC;
+    
+    class SC,SB,PD,SU yellowBox;
+    class Contributors,Maintainers purpleBox;
 ```
 
 ---
