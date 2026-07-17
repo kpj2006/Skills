@@ -383,8 +383,27 @@ class SimulationEngine {
         if (!card) return;
         if (isActive) {
             card.classList.add("active-glow");
+            card.classList.add("active-card");
+            this.updateStepIndicator(cardId);
         } else {
             card.classList.remove("active-glow");
+            card.classList.remove("active-card");
+        }
+    }
+
+    updateStepIndicator(cardId) {
+        const indicator = document.getElementById("step-indicator");
+        const stepText = document.getElementById("step-text");
+        const labels = {
+            repo: "📦 Project Rules",
+            core: "🏢 Organization Playbook",
+            bot: "🤖 Smart Assistant",
+            dash: "🔍 Code Review Guard",
+            updater: "📚 Learning Loop"
+        };
+        if (indicator && stepText) {
+            indicator.style.display = "block";
+            stepText.textContent = labels[cardId] || cardId;
         }
     }
 
