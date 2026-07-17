@@ -65,7 +65,7 @@ This is a scalable, end-to-end repository governance system designed to ensure z
 * **Skill Bot (Discord Assistant)**: Answers contributor queries by vector-searching local/global skill files and logging knowledge gaps.
 * **Skill Updater Pipeline**: Automatically polls maintainer chats, clusters discussions semantically using BERTopic, and drafts Git Pull Requests to update project skills with new decisions.
 * **PR Dashboard (Conflict DAG)**: Fetches open PRs, extracts summaries, clusters overlapping files, and runs local model inference to render a dependency DAG highlighting merge sequences and conflicts.
-* upcoming: PR Skill Updater, cross-repo skills manager
+* upcoming: PR Skill Updater bot, Cross repo skills manager.
 
 ---
 
@@ -93,25 +93,30 @@ This is a scalable, end-to-end repository governance system designed to ensure z
 ## 🏗️ Architecture Diagram
 
 ```mermaid
-graph TD
+flowchart TD
     %% Nodes
-    SC["Skills Core (Shared Foundation)<br><br>AGENTS.md + skills/ directory<br>(Maintainer-approved knowledge)"]
+    SC["Skills Core (Shared Org wide skills)<br><br>per-repo skills (AGENTS.md + skills/ directory)<br>"]
     Contributors["Contributors"]
     Maintainers["Maintainers"]
     
-    SB["Skill Bot (Discord Assistant)<br><br>Answers contributor questions<br>using skills ➔ LLM fallback"]
+    SB["Skill Bot (Discord Assistant)<br><br>Answers contributor questions<br>using asked question-oriented project skills ➔ LLM fallback"]
     PD["PR Dashboard (Merge Analysis)<br><br>Clusters PRs semantically,<br>injects skills context,<br>recommends merge order"]
     SU["Skill Updater (Knowledge Evolution)<br><br>Watches Discord discussions<br>from maintainers ➔ generates<br>updates to skills/"]
 
     %% Edges
+    %% Contributor Flow
+    Contributors -- "Ask Questions in Discord" --> SB
     SC -- "Powers answers" --> SB
+    SB -- "If gaps found, send logs for maintainers<br>to answer and update project skill via updater." --> SU
+
+    %% Maintainer Flow
+    Maintainers -- "Reviews PRs<br>with" --> PD
     SC -- "Powers reasoning" --> PD
-    Contributors -- "Questions in Discord" --> SB
-    Maintainers -- "Reviews PRs with" --> PD
-    Maintainers -- "Technical discussions" --> SU
-    SB -- "Learns gaps" --> SU
     PD -- "Flags stale skills" --> SU
-    SU -- "Updates" --> SC
+
+    %% Feedback Loop & Sync
+    Maintainers -- "Technical discussions" --> SU
+    SU -- "Updates(maintainers must approve)" --> SC
 
     %% Style Classes
     classDef yellowBox fill:#1E293B,stroke:#F59E0B,stroke-width:2px,color:#F8FAFC;
