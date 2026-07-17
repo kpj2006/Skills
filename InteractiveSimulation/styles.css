@@ -86,13 +86,27 @@ body {
 .app-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    padding: 20px;
+    z-index: 1;
     position: relative;
 }
 
+/* Active/Current Step Indicator */
+.step-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(139, 92, 246, 0.1);
+    border: 2px solid var(--color-bot);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-bot);
+    font-family: var(--font-mono);
+    z-index: 100;
+    backdrop-filter: blur(8px);
+}
 /* Connections SVG Canvas */
 .connections-canvas {
     position: absolute;
@@ -358,7 +372,7 @@ body {
 /* Card Styling */
 .card {
     background: var(--card-bg);
-    border: 1px solid var(--card-border);
+    border: 2px solid var(--card-border);
     border-radius: 16px;
     padding: 1.5rem;
     backdrop-filter: blur(12px);
@@ -367,6 +381,12 @@ body {
     gap: 1rem;
     transition: var(--transition-smooth);
     position: relative;
+    margin-bottom: 2rem;
+}
+
+.card.active-card {
+    border-width: 2px;
+    transform: scale(1.01);
 }
 
 /* Hover glow states */
