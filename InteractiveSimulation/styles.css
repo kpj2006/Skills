@@ -346,130 +346,93 @@ body {
 }
 
 /* Dashboard Grid */
-/* Pentagon Layout */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: auto auto auto;
-    gap: 4rem 3rem;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
     z-index: 2;
     position: relative;
-    max-width: 1600px;
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding: 3rem 1rem;
+    padding: 1.5rem 1rem;
     border: 1px dashed rgba(139, 92, 246, 0.1);
     border-radius: 20px;
     background: radial-gradient(circle at center, rgba(139, 92, 246, 0.02) 0%, transparent 70%);
 }
 
-/* Pentagon vertex positioning - 5 components at corners */
-.card-repo {
-    grid-column: 1 / 2;
-    grid-row: 1 / 2;
-    justify-self: center;
-    align-self: start;
-}
-
-.card-bot {
-    grid-column: 3 / 4;
-    grid-row: 1 / 2;
-    justify-self: center;
-    align-self: start;
-}
-
-.card-core {
-    grid-column: 5 / 6;
-    grid-row: 1 / 2;
-    justify-self: center;
-    align-self: start;
-}
-
-.card-dash {
-    grid-column: 1 / 2;
-    grid-row: 3 / 4;
-    justify-self: center;
-    align-self: start;
-}
-
-.card-updater {
-    grid-column: 5 / 6;
-    grid-row: 3 / 4;
-    justify-self: center;
-    align-self: start;
-}
-
-/* Card size constraint for pentagon */
 .card {
-    max-width: 320px;
-    width: 320px;
+    max-width: 100%;
+    width: auto;
+    position: relative;
+    margin-bottom: 0;
 }
 
-/* Responsive Pentagon */
-@media (max-width: 1400px) {
-    .dashboard-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 3rem 2rem;
-    }
-    
-    .card-repo {
-        grid-column: 1 / 2;
-        grid-row: 1 / 2;
-    }
-    
-    .card-bot {
-        grid-column: 2 / 3;
-        grid-row: 1 / 2;
-    }
-    
-    .card-core {
-        grid-column: 4 / 5;
-        grid-row: 1 / 2;
-    }
-    
-    .card-dash {
-        grid-column: 1 / 2;
-        grid-row: 3 / 4;
-    }
-    
-    .card-updater {
-        grid-column: 4 / 5;
-        grid-row: 3 / 4;
-    }
-}
-
-@media (max-width: 1024px) {
-    .dashboard-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2.5rem 1.5rem;
-    }
-    
-    .card {
-        max-width: 280px;
-        width: 280px;
-    }
-}
-
-@media (max-width: 768px) {
+/* Tablet grid layout */
+@media (min-width: 601px) and (max-width: 1024px) {
     .dashboard-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 2rem 1rem;
+        gap: 2rem 1.5rem;
     }
-    
-    .card {
-        max-width: 100%;
-        width: auto;
-    }
-    
     .card-bot {
-        grid-column: 1 / 3;
+        grid-column: span 2;
+        justify-self: center;
+        width: 320px;
     }
 }
 
-@media (max-width: 600px) {
+/* Desktop Pentagon layout */
+@media (min-width: 1025px) {
     .dashboard-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+        display: block; /* Disable grid for absolute positioning */
+        width: 100%;
+        max-width: 1350px;
+        height: 950px;
+        padding: 3rem 1rem;
+        border: 1px dashed rgba(139, 92, 246, 0.15);
+        background: radial-gradient(circle at 50% 53%, rgba(139, 92, 246, 0.04) 0%, transparent 60%);
+    }
+
+    .card {
+        max-width: 320px;
+        width: 320px;
+        position: absolute;
+        margin-bottom: 0;
+    }
+
+    /* Vertex 0: Top Center */
+    .card-bot {
+        left: 50%;
+        top: 20%;
+        transform: translate(-50%, -50%);
+    }
+
+    /* Vertex 1: Top Right */
+    .card-core {
+        left: 83.3%;
+        top: 42.8%;
+        transform: translate(-50%, -50%);
+    }
+
+    /* Vertex 2: Bottom Right */
+    .card-updater {
+        left: 70.6%;
+        top: 79.7%;
+        transform: translate(-50%, -50%);
+    }
+
+    /* Vertex 3: Bottom Left */
+    .card-repo {
+        left: 29.4%;
+        top: 79.7%;
+        transform: translate(-50%, -50%);
+    }
+
+    /* Vertex 4: Top Left */
+    .card-dash {
+        left: 16.7%;
+        top: 42.8%;
+        transform: translate(-50%, -50%);
     }
 }
 
@@ -484,8 +447,6 @@ body {
     flex-direction: column;
     gap: 1rem;
     transition: var(--transition-smooth);
-    position: relative;
-    margin-bottom: 2rem;
 }
 
 .card.active-card {

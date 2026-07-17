@@ -689,64 +689,85 @@ function updateConnections() {
 
     const containerRect = document.querySelector(".app-container").getBoundingClientRect();
 
-    // Helper to get edge connection points relative to container
-    function getConnectorPoints(element) {
+    // Helper to get card center relative to container
+    function getCardCenter(element) {
         const rect = element.getBoundingClientRect();
         return {
             x: rect.left - containerRect.left + rect.width / 2,
-            y: rect.top - containerRect.top + rect.height / 2,
-            left: rect.left - containerRect.left,
-            right: rect.right - containerRect.left,
-            top: rect.top - containerRect.top,
-            bottom: rect.bottom - containerRect.top,
-            width: rect.width,
-            height: rect.height
+            y: rect.top - containerRect.top + rect.height / 2
         };
     }
 
     const pts = {
-        repo: getConnectorPoints(cards.repo),
-        core: getConnectorPoints(cards.core),
-        bot: getConnectorPoints(cards.bot),
-        dash: getConnectorPoints(cards.dash),
-        updater: getConnectorPoints(cards.updater)
+        repo: getCardCenter(cards.repo),
+        core: getCardCenter(cards.core),
+        bot: getCardCenter(cards.bot),
+        dash: getCardCenter(cards.dash),
+        updater: getCardCenter(cards.updater)
     };
 
-    // Pentagon layout paths - components positioned at vertices
-    // Top row: Repo (left) -> Bot (center) -> Core (right)
-    // Bottom row: Dash (left) -> Updater (right)
-    
-    // 1. Repo -> Bot (Local Context read - horizontal)
-    const dRepoBot = `M ${pts.repo.right} ${pts.repo.y} Q ${(pts.repo.right + pts.bot.left) / 2} ${pts.repo.y - 80}, ${pts.bot.left} ${pts.bot.y}`;
-    document.getElementById("path-repo-bot").setAttribute("d", dRepoBot);
+    // Center of the pentagon
+    const centerX = (pts.repo.x + pts.core.x + pts.bot.x + pts.dash.x + pts.updater.x) / 5;
+    const centerY = (pts.repo.y + pts.core.y + pts.bot.y + pts.dash.y + pts.updater.y) / 5;
 
-    // 2. Bot -> Core (center to right - horizontal)
-    const dBotCore = `M ${pts.bot.right} ${pts.bot.y} Q ${(pts.bot.right + pts.core.left) / 2} ${pts.bot.y - 80}, ${pts.core.left} ${pts.core.y}`;
-    document.getElementById("path-core-bot").setAttribute("d", dBotCore);
+    // Helper to draw a quadratic curve with adjustable bend towards center and perpendicular offset
+    function setPath(pathId, fromId, toId, bendFactor = 0.2, offsetDist = 0) {
+        const p1 = pts[fromId];
+        const p2 = pts[toId];
+        const midX = (p1.x + p2.x) / 2;
+        const midY = (p1.y + p2.y) / 2;
 
-    // 3. Repo -> Dash (left vertical edge - diagonal down)
-    const dRepoDash = `M ${pts.repo.x} ${pts.repo.bottom} L ${pts.dash.x} ${pts.dash.top}`;
-    document.getElementById("path-repo-dash").setAttribute("d", dRepoDash);
+        // Vector pointing towards the center of the pentagon
+        const toCenterX = centerX - midX;
+        const toCenterY = centerY - midY;
 
-    // 4. Core -> Updater (right vertical edge - diagonal down)
-    const dCoreUpdater = `M ${pts.core.x} ${pts.core.bottom} L ${pts.updater.x} ${pts.updater.top}`;
-    document.getElementById("path-core-dash").setAttribute("d", dCoreUpdater);
+        let ctrlX = midX + bendFactor * toCenterX;
+        let ctrlY = midY + bendFactor * toCenterY;
 
-    // 5. Dash -> Updater (bottom edge - horizontal)
-    const dDashUpdater = `M ${pts.dash.right} ${pts.dash.y} L ${pts.updater.left} ${pts.updater.y}`;
-    document.getElementById("path-bot-updater").setAttribute("d", dDashUpdater);
+        // Optional perpendicular offset to separate parallel/crossing lines
+        if (offsetDist !== 0) {
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const len = Math.sqrt(dx * dx + dy * dy);
+            if (len > 0) {
+                const px = -dy / len;
+                const py = dx / len;
+                ctrlX += px * offsetDist;
+                ctrlY += py * offsetDist;
+            }
+        }
 
-    // 6. Bot -> Updater (center to bottom right - diagonal)
-    const dBotUpdaterFlow = `M ${pts.bot.right} ${pts.bot.bottom} Q ${(pts.bot.right + pts.updater.left) / 2} ${(pts.bot.bottom + pts.updater.top) / 2 + 40}, ${pts.updater.left} ${pts.updater.top}`;
-    document.getElementById("path-dash-updater").setAttribute("d", dBotUpdaterFlow);
+        const pathStr = `M ${p1.x} ${p1.y} Q ${ctrlX} ${ctrlY}, ${p2.x} ${p2.y}`;
+        const pathEl = document.getElementById(pathId);
+        if (pathEl) {
+            pathEl.setAttribute("d", pathStr);
+        }
+    }
 
-    // 7. Updater -> Repo (bottom right to top left - long arc)
-    const dUpdaterRepo = `M ${pts.updater.left - 20} ${pts.updater.y} C ${pts.updater.x - 100} ${(pts.updater.y + pts.repo.y) / 2 + 80}, ${pts.repo.x + 100} ${pts.repo.y - 80}, ${pts.repo.x} ${pts.repo.top}`;
-    document.getElementById("path-updater-repo").setAttribute("d", dUpdaterRepo);
+    // Set paths between cards dynamically
+    // 1. Repo -> Bot (Local Context read)
+    setPath("path-repo-bot", "repo", "bot", 0.05);
 
-    // 8. Updater -> Core (bottom right to top right - arc)
-    const dUpdaterCore = `M ${pts.updater.right + 20} ${pts.updater.y} C ${pts.updater.x + 100} ${(pts.updater.y + pts.core.y) / 2 + 80}, ${pts.core.x + 100} ${pts.core.y - 80}, ${pts.core.x} ${pts.core.top}`;
-    document.getElementById("path-updater-core").setAttribute("d", dUpdaterCore);
+    // 2. Core -> Bot (Global Context read)
+    setPath("path-core-bot", "core", "bot", 0.25);
+
+    // 3. Repo -> Dash (Local Rules checks)
+    setPath("path-repo-dash", "repo", "dash", 0.25);
+
+    // 4. Core -> Dash (Global Policy checks - crosses interior)
+    setPath("path-core-dash", "core", "dash", 0.05, 30);
+
+    // 5. Bot -> Updater (Ambiguous queries gap signals - crosses interior)
+    setPath("path-bot-updater", "bot", "updater", 0.05, -30);
+
+    // 6. Dash -> Updater (Staleness/PR signals - crosses interior)
+    setPath("path-dash-updater", "dash", "updater", 0.05, 15);
+
+    // 7. Updater -> Repo (Write git patches to Repo)
+    setPath("path-updater-repo", "updater", "repo", 0.25);
+
+    // 8. Updater -> Core (Write git patches to Core)
+    setPath("path-updater-core", "updater", "core", 0.25);
 
     connectionsCalculated = true;
 }
