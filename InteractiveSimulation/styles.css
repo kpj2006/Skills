@@ -107,7 +107,6 @@ body {
     z-index: 100;
     backdrop-filter: blur(8px);
 }
-
 /* Connections SVG Canvas */
 .connections-canvas {
     position: absolute;
