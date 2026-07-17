@@ -120,75 +120,80 @@ let isAutoplay = false;
 // Scenarios Timeline Actions
 const SCENARIOS = {
     a: {
-        name: "New Contributor Journey",
-        description: "See how the Smart Assistant helps a new team member get started.",
+        name: "Discord Chat & Gap Flow",
+        description: "Controlling queries, mentor-clarification, and gap-signal feedback loop.",
         steps: [
             {
-                label: "Contributor Asks for Help",
+                label: "Submit User Query",
                 run: (engine) => {
                     engine.focusCards(['bot']);
-                    engine.addLog("📝 New contributor asks in #ai-chat: 'How do I deploy this to production?'", "system");
-                    engine.simulateDiscordUserMsg("How do I deploy this to production?");
+                    engine.addLog("User submitted Discord query in #ai-chat: 'How do I deploy this template to production?'", "system");
+                    engine.simulateDiscordUserMsg("How do I deploy this template to production?");
                     engine.setCardActive("bot", true);
-                    engine.addLog("🤖 Smart Assistant: Looking for answers in our project knowledge...", "info");
+                    engine.addLog("Skill Bot: Intercepted query. Starting vector index search...", "info");
                     return Promise.resolve();
                 }
             },
             {
-                label: "Search Project Knowledge",
+                label: "Scan Local Context (Per-Repo)",
                 run: (engine) => {
-                    engine.addLog("🔍 Checking Project Rules...", "info");
+                    engine.addLog("Skill Bot: Computing similarity embedding for query...", "info");
                     return engine.animatePacket("repo", "bot", () => {
-                        engine.addLog("✓ Found 'setup.md' and 'architecture.md' in Project Rules", "info");
-                        engine.addLog("⚠ These don't mention production deployment yet", "warn");
-                        engine.addLog("🔍 Checking Organization Playbook for deployment patterns...", "info");
+                        engine.addLog("Skill Bot: Retrieved 'setup.md' and 'architecture.md' from Per-Repository Skills.", "info");
+                        engine.addLog("Skill Bot: Cosine similarity score = 0.45. Confidence threshold is 0.70.", "warn");
+                        engine.addLog("Skill Bot: Question is ambiguous (no production rules found in setup.md). Checking global policies...", "warn");
                         
+                        // Briefly check core skills as well
                         return engine.animatePacket("core", "bot", () => {
-                            engine.addLog("✓ Scanned Organization Playbook", "info");
-                            engine.addLog("❓ The answer isn't clear from existing knowledge", "warn");
+                            engine.addLog("Skill Bot: Scanned Skills Core for global AI policy compliance.", "info");
+                            // Show Choice Prompt to user in UI
                             document.getElementById("prompt-choices").style.display = "flex";
-                            engine.addLog("🤖 Smart Assistant: Let me help you clarify what you need", "system");
+                            engine.addLog("Skill Bot: Awaiting mentor decision flow step...", "system");
                         });
                     });
                 }
             },
             {
-                label: "Get More Details or Learn",
+                label: "Resolve Decision (Gap Flow or Clarify)",
                 run: (engine, subOption) => {
                     engine.focusCards(['bot']);
+                    // Hide options
                     document.getElementById("prompt-choices").style.display = "none";
                     
                     if (subOption === 'clarify' || !subOption) {
-                        engine.simulateDiscordBotMsg("Are you deploying to a local server or cloud (like AWS)?");
-                        engine.addLog("💬 Smart Assistant: Asking clarifying questions to understand better", "info");
+                        // Clarify Option (Roadmap Phase 1)
+                        engine.simulateDiscordBotMsg("Are you setting up for a local development build, or deploying to a cloud server like AWS/Vercel?");
+                        engine.addLog("Skill Bot [Clarification Flow]: Asked clarifying question to refine intent.", "info");
                         
                         return new Promise((resolve) => {
                             setTimeout(() => {
-                                engine.simulateDiscordUserMsg("AWS with RDS + App Runner");
-                                engine.addLog("📝 Contributor replies: 'AWS with RDS + App Runner'", "system");
+                                engine.simulateDiscordUserMsg("Deploying to AWS RDS + App Runner");
+                                engine.addLog("User replied: 'Deploying to AWS RDS + App Runner'", "system");
                                 
                                 setTimeout(() => {
-                                    engine.addLog("🤖 Smart Assistant: Searching for AWS deployment patterns...", "info");
-                                    engine.simulateDiscordBotMsg("Great! I found some guidance, but we don't have complete AWS deployment docs yet. Let me note this gap so your team can document it.");
-                                    engine.addLog("📌 Important: This question reveals a knowledge gap we should fill", "warn");
+                                    engine.addLog("Skill Bot: Re-evaluating refined query: 'AWS App Runner setup'...", "info");
+                                    engine.simulateDiscordBotMsg("Found no specific deployment skill in Per-Repository Skills. general Docker containers run via AWS App Runner. Let me write this query to the Gap Logs.");
+                                    engine.addLog("Skill Bot: Confirmed knowledge gap. Logging GAP SIGNAL to gap_log.json.", "warn");
                                     
+                                    // Send gap packet to updater
                                     engine.animatePacket("bot", "updater", () => {
-                                        engine.addLog("✓ Learning Signal: 'AWS deployment' added to team learning backlog", "success");
+                                        engine.addLog("Skill Updater: Intercepted GAP SIGNAL: {'query': 'AWS App Runner deployment', 'source': 'Discord #ai-chat'}", "success");
                                         engine.setCardActive("updater", true);
-                                        engine.setUpdaterStepActive("poll", "Learning Gap Captured");
+                                        engine.setUpdaterStepActive("poll", "Gap Signal Added to Queue");
                                     }).then(resolve);
                                 }, 1200);
                             }, 1200);
                         });
                     } else {
-                        engine.simulateDiscordBotMsg("I found some general guidance, but it's not specific to your team's practices. Let me note this so the team can improve our docs.");
-                        engine.addLog("⚠ Fallback: Providing general guidance (not team-specific)", "warn");
-                        engine.addLog("📌 Recording this gap so the team learns from it", "warn");
+                        // Direct LLM fallback and Gap logging
+                        engine.simulateDiscordBotMsg("I couldn't find deployment instructions in our Per-Repository Skills. Falling back to general LLM guidelines. [Warning: General advice only.]");
+                        engine.addLog("Skill Bot: confidence < 0.70. Emitted fallback response.", "warn");
+                        engine.addLog("Skill Bot: Emitting GAP SIGNAL to gap_log.json...", "warn");
                         
                         return engine.animatePacket("bot", "updater", () => {
-                            engine.addLog("✓ Learning Signal: Contributor confusion captured for team review", "success");
+                            engine.addLog("Skill Updater: Intercepted GAP SIGNAL: {'query': 'deploy to production', 'source': 'Discord #ai-chat'}", "success");
                             engine.setCardActive("updater", true);
-                            engine.setUpdaterStepActive("poll", "Knowledge Gap Logged");
+                            engine.setUpdaterStepActive("poll", "Gap Signal Logged");
                         });
                     }
                 }
@@ -196,93 +201,94 @@ const SCENARIOS = {
         ]
     },
     b: {
-        name: "Maintainer Review",
-        description: "See how architectural conflicts are caught before they merge.",
+        name: "PR Analysis & Staleness Flow",
+        description: "Evaluating PR CodeRabbit summaries, building DAG merge conflicts, and signaling stale skills.",
         steps: [
             {
-                label: "Review New Pull Requests",
+                label: "Analyze Open Pull Requests",
                 run: (engine) => {
                     engine.focusCards(['dash']);
-                    engine.addLog("👀 Checking for new pull requests...", "info");
-                    engine.addLog("📊 Found 2 PRs that might conflict: PR #41 (Database Update) and PR #42 (ORM Setup)", "info");
+                    engine.addLog("PR Dashboard: Fetching open PRs from Github API...", "info");
+                    engine.addLog("PR Dashboard: Found 2 overlapping PRs: PR #41 (Add Direct PostgreSQL Client) and PR #42 (Setup Prisma ORM)", "info");
                     engine.setCardActive("dash", true);
-                    engine.addLog("🔐 Code Review Guard: Loading project architecture rules...", "info");
                     return Promise.resolve();
                 }
             },
             {
-                label: "Check Against Project Rules",
+                label: "Inject Per-Repo context & Core Rules",
                 run: (engine) => {
-                    engine.addLog("🔍 Scanning Project Rules...", "info");
+                    engine.addLog("PR Dashboard: Querying ChromaDB index of local Per-Repository Skills...", "info");
                     return engine.animatePacket("repo", "dash", () => {
-                        engine.addLog("✓ Loaded: Architecture rules, database guidelines, best practices", "info");
-                        engine.addLog("⚠ PR #41 might violate the 'use ORM for DB access' rule", "warn");
-                        engine.addLog("🔍 Checking Organization Playbook for policies...", "info");
+                        engine.addLog("PR Dashboard: Matched and injected context from local '.agent/core/architecture.md' (rules on Prisma/DB models).", "info");
+                        engine.addLog("PR Dashboard: Cross-referencing Org-Wide Skills Core for AI Policies...", "info");
                         
                         return engine.animatePacket("core", "dash", () => {
-                            engine.addLog("✓ Loaded: Security policies and coding standards", "success");
-                            engine.addLog("🔄 Analyzing conflicts with all project guidelines...", "info");
+                            engine.addLog("PR Dashboard: Checked compliance with GIT-DIS-AIPolicy.", "success");
+                            engine.addLog("PR Dashboard: Running local Ollama inference on conflict analysis...", "info");
                         });
                     });
                 }
             },
             {
-                label: "Surface Risks & Update Docs",
+                label: "Detect Conflict Graph & Staleness",
                 run: (engine) => {
-                    engine.addLog("⚠️ CONFLICT DETECTED: PR #41 bypasses the ORM layer (violates architecture)", "warn");
-                    engine.addLog("📋 Generated conflict report for review", "success");
+                    // Highlight the conflict Nodes
+                    document.getElementById("dag-pr-41").classList.add("active-evaluation");
+                    document.getElementById("dag-pr-42").classList.add("active-evaluation");
                     
-                    engine.addLog("📌 Also detected: PR #42 requires Node 20, but setup docs mention Node 18", "warn");
-                    engine.addLog("This doc gap should be fixed", "warn");
+                    engine.addLog("PR Dashboard: Semantic conflict found. PR #41 bypasses the Prisma model layer specified in local architecture.md.", "warn");
+                    engine.addLog("PR Dashboard: Generated conflict DAG HTML report.", "success");
+                    
+                    // Emitting Staleness signal
+                    engine.addLog("PR Dashboard: Stale Skill detected (PR #42 introduces Node 20 engine undocumented in setup.md). Emitting STALENESS SIGNAL.", "warn");
                     
                     return engine.animatePacket("dash", "updater", () => {
-                        engine.addLog("✓ Architectural Issue: Added to team review backlog", "success");
-                        engine.addLog("✓ Documentation Gap: Added to team learning queue", "success");
+                        engine.addLog("Skill Updater: Received STALENESS SIGNAL: {'file': '.agent/instructions/setup.md', 'type': 'outdated node engine'}", "success");
                         engine.setCardActive("updater", true);
-                        engine.setUpdaterStepActive("poll", "Issues & Gaps Captured");
+                        engine.setUpdaterStepActive("poll", "Staleness Signal Logged");
                     });
                 }
             }
         ]
     },
     c: {
-        name: "Team Learning",
-        description: "Automatic knowledge capture and documentation updates from real team interactions.",
+        name: "Discussion to Update Loop",
+        description: "BERTopic Semantic clustering on developer chats/logs to patch Per-Repo Skills in Git.",
         steps: [
             {
-                label: "Collect Team Signals",
+                label: "Poll Signals & Chats",
                 run: (engine) => {
                     engine.focusCards(['updater']);
-                    engine.addLog("📚 Learning System: Gathering team inputs...", "info");
-                    engine.addLog("✓ Collected: 1 Discord discussion + 1 gap from new contributor + 1 doc conflict", "info");
+                    engine.addLog("Skill Updater: Fetching unread maintainer Discord conversations...", "info");
+                    engine.addLog("Skill Updater: Aggregating active inputs: 1 Discord thread, 1 Gap Signal, 1 Staleness Signal.", "info");
                     engine.setCardActive("updater", true);
-                    engine.setUpdaterStepActive("poll", "Processing: 3 learning signals");
-                    engine.addLog("🧠 Analyzing patterns in how the team is learning...", "info");
+                    engine.setUpdaterStepActive("poll", "Polling Active: 3 signals fetched");
                     return Promise.resolve();
                 }
             },
             {
-                label: "Find Common Themes",
+                label: "Online Semantic Topic Clustering",
                 run: (engine) => {
                     engine.focusCards(['updater']);
-                    engine.addLog("🔗 Grouping related signals together...", "info");
-                    engine.setUpdaterStepActive("cluster", "Finding patterns");
+                    engine.addLog("Skill Updater: Running BERTopic Incremental Online Clustering...", "info");
+                    engine.setUpdaterStepActive("cluster", "BERTopic: Groups formed");
                     
                     return new Promise((resolve) => {
                         setTimeout(() => {
-                            engine.addLog("✓ Pattern found: Team needs better 'Node 20 & AWS deployment' documentation", "success");
-                            engine.addLog("📝 Summary: Multiple team members asked about these topics recently", "info");
+                            engine.addLog("Skill Updater: Grouped 3 signals into Cluster #5: 'development setup dependencies update'.", "success");
+                            engine.addLog("Skill Updater: Representative phrase: 'Upgrade local dev server setup details with Node 20 / AWS deployment options'.", "info");
                             resolve();
                         }, 500);
                     });
                 }
             },
             {
-                label: "Draft Updated Documentation",
+                label: "Generate Git Diff Patch",
                 run: (engine) => {
                     engine.focusCards(['updater']);
-                    engine.addLog("✍️ AI Assistant: Drafting improved documentation...", "info");
+                    engine.addLog("Skill Updater: Prompting local Llama3 model with cluster content...", "info");
                     
+                    // Display Git Diff Patch preview
                     const diffContainer = document.getElementById("patch-preview-container");
                     const diffText = document.getElementById("patch-diff-content");
                     diffContainer.style.display = "block";
@@ -299,20 +305,20 @@ index a3f821d..b59ec42 100644
   ## Local Development Setup`;
 
                     diffText.textContent = patchStr;
-                    engine.addLog("✓ Draft ready: Added AWS and Node 20 guidance", "success");
-                    engine.setUpdaterStepActive("patch", "Documentation Update");
+                    engine.addLog("Skill Updater: Generated JSON git-patch structure.", "success");
+                    engine.setUpdaterStepActive("patch", "Patch Ready");
                     return Promise.resolve();
                 }
             },
             {
-                label: "Apply to Project Rules",
+                label: "Apply Patch to Per-Repo Skills",
                 run: (engine) => {
-                    engine.addLog("📤 Updating project knowledge base...", "info");
+                    engine.addLog("Skill Updater: Executing skill_patcher.py on local repository workspace...", "info");
                     
                     return engine.animatePacket("updater", "repo", () => {
-                        engine.addLog("✓ Project Rules: Successfully updated with new setup guidance", "success");
-                        engine.addLog("✓ Changes committed to team repository", "success");
+                        engine.addLog("Per-Repository Skills: Patch applied successfully in Git. Created commit 'docs: update setup instructions node version & AWS context'.", "success");
                         
+                        // Dynamically update Per-Repo setup.md mock content!
                         MOCK_FILES_REPO.setup.content = `# Project Setup & Local Development
 
 ## Prerequisites
@@ -327,16 +333,17 @@ index a3f821d..b59ec42 100644
 4. Run migrations: npx prisma migrate dev
 5. Run dev server: npm run dev`;
 
+                        // Check if setup is active tab in Repo card, update editor body
                         const activeFile = document.querySelector("#file-tree-repo .tree-item.active")?.getAttribute("data-file");
                         if (activeFile === "setup") {
                             renderFile("setup", true);
                         } else {
+                            // Select setup file to show update
                             const setupTreeItem = document.querySelector("#file-tree-repo .tree-item[data-file='setup']");
                             setupTreeItem.click();
                         }
                         
-                        engine.addLog("🎯 Learning Complete! Your team's knowledge is now better documented.", "success");
-                        engine.addLog("🔄 Next new contributors will benefit from this collective learning", "success");
+                        engine.addLog("Ecosystem Loop Completed! Per-Repository Skills are now updated. Future bot replies and PR reviews will leverage this new context.", "success");
                         engine.setCardActive("repo", true);
                     });
                 }
