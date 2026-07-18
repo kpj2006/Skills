@@ -95,13 +95,13 @@ This is a scalable, end-to-end repository governance system designed to ensure z
 ```mermaid
 flowchart TD
     %% Nodes
-    SC["Skills Core (Shared Org wide skills)<br><br>per-repo skills (AGENTS.md + skills/ directory)<br>"]
+    SC["<b><font color='#F59E0B'>Skills Context</font></b><br><br>Skills Core (Shared Org wide skills)<br>per-repo skills (AGENTS.md + skills/ directory)"]
     Contributors["Contributors"]
     Maintainers["Maintainers"]
     
-    SB["Skill Bot (Discord Assistant)<br><br>Answers contributor questions<br>using asked question-oriented project skills ➔ LLM fallback"]
-    PD["PR Dashboard (Merge Analysis)<br><br>Clusters PRs semantically,<br>injects skills context,<br>recommends merge order"]
-    SU["Skill Updater (Knowledge Evolution)<br><br>Watches Discord discussions<br>from maintainers ➔ generates<br>updates to skills/"]
+    SB["<b><font color='#F59E0B'>Skill Bot</font></b> (Discord Assistant)<br><br>Answers contributor questions<br>using asked question-oriented project skills ➔ LLM fallback"]
+    PD["<b><font color='#F59E0B'>PR Dashboard</font></b> (Merge Analysis)<br><br>Clusters PRs semantically, injects skills & communication(e.g. Discord) context.<br>Extracts PR changes briefly & open questions for maintainers to review.<br>Prepares Conflict DAG with merge reasoning & post-merge impact."]
+    SU["<b><font color='#F59E0B'>Skill Updater</font></b> (Knowledge Evolution)<br><br>Collects all logs from different components.<br>Updates relevant repo-skills by asking maintainers or admins<br>to review and approve generated updates."]
 
     %% Edges
     %% Contributor Flow
