@@ -169,21 +169,6 @@ sequenceDiagram
     end
 ```
 
-### Key User Journeys
-
-1. **Developer Setup & FAQ Support**:
-   * **Step 1**: A contributor posts a query (e.g., "How do I build and run tests?") in Discord.
-   * **Step 2**: Skill Bot creates a scoped thread, retrieves relevant chunks from ChromaDB, and replies.
-   * **Step 3**: If details are missing, Skill Bot logs a gap signal, prompting the local LLM to reply with a fallback guardrail.
-2. **Interactive Simulation Walkthrough**:
-   * **Step 1**: Open the [Interactive Simulation](https://kpj2006.github.io/InteractiveSimulation/) dashboard.
-   * **Step 2**: Select a Scenario (A, B, or C) from the control panel.
-   * **Step 3**: Click **Trigger Step** or **Auto-Play** to watch visual data packets flow between components (Bot, Dashboard, Updater, Repo) in real-time.
-4. **Pull Request Conflict Resolution**:
-   * **Step 1**: Maintainer starts the PR Dashboard tool.
-   * **Step 2**: The tool fetches active PR summaries and renders an interactive HTML report mapping dependencies.
-   * **Step 3**: The maintainer follows the recommended merge order (e.g. merge ORM setup first, rebase direct client next) to minimize manual refactoring.
-
 ---
 
 ## 🏁 Getting Started
