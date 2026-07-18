@@ -112,11 +112,11 @@ flowchart TD
     %% Maintainer Flow
     Maintainers -- "Reviews PRs<br>with" --> PD
     SC -- "Powers reasoning" --> PD
-    PD -- "Flags stale skills" --> SU
+    PD -- "If gaps found, send logs for maintainers<br>to answer and update those project skills via updater." --> SU
 
     %% Feedback Loop & Sync
-    Maintainers -- "Technical discussions" --> SU
-    SU -- "Updates(maintainers must approve)" --> SC
+    Maintainers -- "Collects communication platform (e.g. Discord) discussions, filters important<br>topics by giving that repo-skills context, and sends suggested updates to maintainers<br>to reformat or modify as needed (maintainer approve)" --> SU
+    SU -- "PR Skill Updater bot opens PR for gap skills and<br>recently merged PR context (maintainers approve)" --> SC
 
     %% Style Classes
     classDef yellowBox fill:#1E293B,stroke:#F59E0B,stroke-width:2px,color:#F8FAFC;
