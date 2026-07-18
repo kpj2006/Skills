@@ -138,31 +138,35 @@ sequenceDiagram
     participant SkillBot
     participant SkillUpdater
     participant PRDashboard
-    participant GitRepository
+    participant SkillsContext
+    participant Ollama
 
     %% Flow 1: Developer Q&A
     Contributor->>SkillBot: Ask development question on Discord
-    SkillBot->>GitRepository: Search Skills Core & Local Context
+    SkillBot->>SkillsContext: Search Skills Context (Skills Core & per-repo skills)
     alt Skill file match found
         SkillBot-->>Contributor: Reply with grounded context-first answer
     else Skill file match not found (Confidence < 0.5)
         SkillBot->>SkillBot: Call local LLM fallback
         SkillBot-->>Contributor: Reply with safety disclaimer
-        SkillBot->>SkillUpdater: Log Knowledge Gap Signal
+        SkillBot->>SkillUpdater: Send log to answer & update project skills via updater
     end
 
     %% Flow 2: Knowledge Capture Loop
-    Maintainer->>SkillBot: Refine architecture / rules in Discord thread
-    SkillUpdater->>SkillUpdater: Fetch chats, cluster semantically (BERTopic)
+    Maintainer->>SkillUpdater: Technical discussions / Refine rules on Discord
+    SkillUpdater->>SkillUpdater: Collect Discord discussions & filter important topics using repo-skills context
     SkillUpdater->>Ollama: Generate git-patch updating skill files
-    SkillUpdater->>GitRepository: Create Pull Request with skill updates
-    Maintainer->>GitRepository: Merge PR -> Skills Core updated!
+    SkillUpdater->>SkillsContext: PR Skill Updater bot opens PR for gap skills & recently merged PR context
+    Maintainer->>SkillsContext: Review and approve/merge PR (Skills Context updated!)
 
     %% Flow 3: Code Review & Conflict Analysis
-    Maintainer->>PRDashboard: Run PR analysis before merges
-    PRDashboard->>GitRepository: Fetch open PR summaries & Core Skills
-    PRDashboard->>Ollama: Analyze overlapping files & architectural rules
-    PRDashboard-->>Maintainer: Render Conflict DAG & Suggested Merge Sequence
+    Maintainer->>PRDashboard: Reviews PRs & runs merge analysis
+    PRDashboard->>SkillsContext: Fetch open PR summaries, skills & communication (Discord) context
+    PRDashboard->>Ollama: Analyze PR changes, open questions & prepare Conflict DAG
+    PRDashboard-->>Maintainer: Render Conflict DAG (with merge reasoning & post-merge impact) & open questions
+    alt Gap found in skills during PR analysis
+        PRDashboard->>SkillUpdater: Send logs to answer and update those project skills via updater
+    end
 ```
 
 ### Key User Journeys
