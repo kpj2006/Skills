@@ -4,17 +4,15 @@
 <!-- Organization Logo -->
 <div align="center" style="display: flex; align-items: center; justify-content: center; gap: 16px;">
   <img alt="AOSSIE" src="public/aossie-logo.svg" width="175">
-  <img src="public/todo-project-logo.svg" width="175" />
+  <img alt="Stability Nexus" src="public/stability.svg" width="175" />
 </div>
 
 &nbsp;
 
-<!-- Organization Name -->
+<!-- Organization/Project Badges -->
 <div align="center">
 
-[![Static Badge](https://img.shields.io/badge/aossie.org/TODO-228B22?style=for-the-badge&labelColor=FFC517)](https://TODO.aossie.org/)
-
-<!-- Correct deployed url to be added -->
+[![Static Badge](https://img.shields.io/badge/aossie.org/Skills--Ecosystem-228B22?style=for-the-badge&labelColor=FFC517)](https://kpj2006.github.io/InteractiveSimulation/)
 
 </div>
 
@@ -48,202 +46,165 @@
 ---
 
 <div align="center">
-<h1>TODO: Project Name</h1>
+<h1>AOSSIE Skills Ecosystem</h1>
+<h3>Contextual Contribution Governance Infrastructure</h3>
 </div>
 
-[TODO](https://TODO.stability.nexus/) is a ... TODO: Project Description.
+The **AOSSIE Skills Ecosystem** is a local-first, context-first AI governance infrastructure that implements the Agentic AI Foundation's (AAIF) open standards for agentic repository customization. Across large organizations hosting hundreds of repositories, AI-assisted tools frequently suggest incorrect code or violate project boundaries due to a lack of repository context. 
+
+This is a scalable, end-to-end repository governance system designed to ensure zero knowledge loss. It automatically catches insights from developer discussions to update repository skill files, runs community bots to resolve contributor questions, and displays a dashboard that highlights conflict warnings, suggested replies for ambiguous contributor PRs, and recommended merge sequences. If any knowledge is missing, it logs a gap signal to capture it later.
+
+🔒 Local-First, Private & Scalable: Tested on servers with over 8,000+ members, the entire system is free, open-source, and runs fully on local LLMs—meaning zero info leaks, absolute data privacy, and zero SaaS costs, all while keeping a human in the loop.
 
 ---
 
-## 🚀 Features
+##  Ecosystem Modules
 
-TODO: List your main features here:
-
-- **Feature 1**: Description
-- **Feature 2**: Description
-- **Feature 3**: Description
-- **Feature 4**: Description
+* **Organization-Wide Skills Core**: A centralized repository storing standard, reusable organizational skills and policies (e.g., onboarding, AI safety policies) synchronized across all projects.
+* **Per-Repository Customization (`AGENTS.md` & `.agents`)**: Local repository configuration files defining strict physical boundaries, whole repository context, architectural constraints, and more about that project.
+* **Skill Bot (Discord Assistant)**: Answers contributor queries by vector-searching local/global skill files and logging knowledge gaps.
+* **Skill Updater Pipeline**: Automatically polls maintainer chats, clusters discussions semantically using BERTopic, and drafts Git Pull Requests to update project skills with new decisions.
+* **PR Dashboard (Conflict DAG)**: Fetches open PRs, extracts summaries, clusters overlapping files, and runs local model inference to render a dependency DAG highlighting merge sequences and conflicts.
+* upcoming: PR Skill Updater bot, Cross repo skills manager.
 
 ---
 
 ## 💻 Tech Stack
 
-TODO: Update based on your project
-
-### Frontend
-- React / Next.js / Flutter / React Native
-- TypeScript
-- TailwindCSS
-
-### Backend
-- Flask / FastAPI / Node.js / Supabase
-- Database: PostgreSQL / SQLite / MongoDB
-
-### AI/ML (if applicable)
-- LangChain / LangGraph / LlamaIndex
-- Google Gemini / OpenAI / Anthropic Claude
-- Vector Database: Weaviate / Pinecone / Chroma
-- RAG / Prompt Engineering / Agent Frameworks
-
-### Blockchain (if applicable)
-- Solidity / solana / cardano / ergo Smart Contracts
-- Hardhat / Truffle / foundry
-- Web3.js / Ethers.js / Wagmi
-- OpenZeppelin / alchemy / Infura
+* **Programming Languages**: Python, TypeScript, HTML5, CSS3, JavaScript
+* **Integration APIs & Frameworks**: Discord.py, GitHub CLI (`gh`), Git, Jinja2
+* **NLP & Topic Clustering**: sentence-transformers (`all-MiniLM-L6-v2`), BERTopic, IncrementalPCA, MiniBatchKMeans, NetworkX
+* **Local LLM & Vector DB**: Ollama (`qwen2.5:7b` / `llama3`), ChromaDB (Persistent multi-repo vector indexing), `nomic-embed-text`
 
 ---
 
-## ✅ Project Checklist
 
-TODO: Complete applicable items based on your project type
-
-- [ ] **The protocol** (if applicable):
-   - [ ] has been described and formally specified in a paper.
-   - [ ] has had its main properties mathematically proven.
-   - [ ] has been formally verified.
-- [ ] **The smart contracts** (if applicable):
-   - [ ] were thoroughly reviewed by at least two knights of The Stable Order.
-   - [ ] were deployed to: [Add deployment details]
-- [ ] **The mobile app** (if applicable):
-   - [ ] has an _About_ page containing the Stability Nexus's logo and pointing to the social media accounts of the Stability Nexus.
-   - [ ] is available for download as a release in this repo.
-   - [ ] is available in the relevant app stores.
-- [ ] **The AI/ML components** (if applicable):
-   - [ ] LLM/model selection and configuration are documented.
-   - [ ] Prompts and system instructions are version-controlled.
-   - [ ] Content safety and moderation mechanisms are implemented.
-   - [ ] API keys and rate limits are properly managed.
-
----
 
 ## 🔗 Repository Links
 
-TODO: Update with your repository structure
-
-1. [Main Repository](https://github.com/AOSSIE-Org/TODO)
-2. [Frontend](https://github.com/AOSSIE-Org/TODO/tree/main/frontend) (if separate)
-3. [Backend](https://github.com/AOSSIE-Org/TODO/tree/main/backend) (if separate)
+1. [Skills Core Repository](https://github.com/AOSSIE-Org/Skills)
+2. [Interactive Simulation](https://github.com/kpj2006/InteractiveSimulation) (Live Demo: [demo](https://kpj2006.github.io/InteractiveSimulation/))
+3. [Pull Request Dashboard](https://github.com/AOSSIE-Org/PullRequestDashboard)
+4. [Skill Bot Assistant](https://github.com/AOSSIE-Org/SkillBot)
+5. [Skill Updater Pipeline](https://github.com/kpj2006/skill-updater)
 
 ---
 
 ## 🏗️ Architecture Diagram
 
-TODO: Add your system architecture diagram here
+```mermaid
+flowchart TD
+    %% Nodes
+    SC["<b><font color='#F59E0B'>Skills Context</font></b><br><br>Skills Core (Shared Org wide skills)<br>per-repo skills (AGENTS.md + skills/ directory)"]
+    Contributors["Contributors"]
+    Maintainers["Maintainers"]
+    
+    SB["<b><font color='#F59E0B'>Skill Bot</font></b> (Discord Assistant)<br><br>Answers contributor questions<br>using asked question-oriented project skills ➔ LLM fallback"]
+    PD["<b><font color='#F59E0B'>PR Dashboard</font></b> (Merge Analysis)<br><br>Clusters PRs semantically, injects skills & communication(e.g. Discord) context.<br>Extracts PR changes briefly & open questions for maintainers to review.<br>Prepares Conflict DAG with merge reasoning & post-merge impact."]
+    SU["<b><font color='#F59E0B'>Skill Updater</font></b> (Knowledge Evolution)<br><br>Collects all logs from different components.<br>Updates relevant repo-skills by asking maintainers or admins<br>to review and approve generated updates."]
 
+    %% Edges
+    %% Contributor Flow
+    Contributors -- "Ask Questions in Discord" --> SB
+    SC -- "Powers answers" --> SB
+    SB -- "If gaps found, send logs for maintainers<br>to answer and update project skill via updater." --> SU
+
+    %% Maintainer Flow
+    Maintainers -- "Reviews PRs<br>with" --> PD
+    SC -- "Powers reasoning" --> PD
+    PD -- "If gaps found, send logs for maintainers<br>to answer and update those project skills via updater." --> SU
+
+    %% Feedback Loop & Sync
+    Maintainers -- "Collects communication platform (e.g. Discord) discussions, filters important<br>topics by giving that repo-skills context, and sends suggested updates to maintainers<br>to reformat or modify as needed (maintainer approve)" --> SU
+    SU -- "PR Skill Updater bot opens PR for gap skills and<br>recently merged PR context (maintainers approve)" --> SC
+
+    %% Style Classes
+    classDef yellowBox fill:#1E293B,stroke:#F59E0B,stroke-width:2px,color:#F8FAFC;
+    classDef purpleBox fill:#1E293B,stroke:#8B5CF6,stroke-width:2px,color:#F8FAFC;
+    
+    class SC,SB,PD,SU yellowBox;
+    class Contributors,Maintainers purpleBox;
 ```
-[Architecture Diagram Placeholder]
-```
-
-You can create architecture diagrams using:
-- [Draw.io](https://draw.io)
-- [Excalidraw](https://excalidraw.com)
-- [Lucidchart](https://lucidchart.com)
-- [Mermaid](https://mermaid.js.org) (for code-based diagrams)
-
-Example structure to include:
-- Frontend components
-- Backend services
-- Database architecture
-- External APIs/services
-- Data flow between components
 
 ---
 
 ## 🔄 User Flow
 
-TODO: Add user flow diagrams showing how users interact with your application
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Contributor
+    actor Maintainer
+    participant SkillBot
+    participant SkillUpdater
+    participant PRDashboard
+    participant SkillsContext
+    participant Ollama
 
+    %% Flow 1: Developer Q&A
+    Contributor->>SkillBot: Ask development question on Discord
+    SkillBot->>SkillsContext: Search Skills Context (Skills Core & per-repo skills)
+    alt Skill file match found
+        SkillBot-->>Contributor: Reply with grounded context-first answer
+    else Skill file match not found (Confidence < 0.5)
+        SkillBot->>SkillBot: Call local LLM fallback
+        SkillBot-->>Contributor: Reply with safety disclaimer
+        SkillBot->>SkillUpdater: Send log to answer & update project skills via updater
+    end
+
+    %% Flow 2: Knowledge Capture Loop
+    Maintainer->>SkillUpdater: Technical discussions / Refine rules on Discord
+    SkillUpdater->>SkillUpdater: Collect Discord discussions & filter important topics using repo-skills context
+    SkillUpdater->>Ollama: Generate git-patch updating skill files
+    SkillUpdater->>SkillsContext: PR Skill Updater bot opens PR for gap skills & recently merged PR context
+    Maintainer->>SkillsContext: Review and approve/merge PR (Skills Context updated!)
+
+    %% Flow 3: Code Review & Conflict Analysis
+    Maintainer->>PRDashboard: Reviews PRs & runs merge analysis
+    PRDashboard->>SkillsContext: Fetch open PR summaries, skills & communication (Discord) context
+    PRDashboard->>Ollama: Analyze PR changes, open questions & prepare Conflict DAG
+    PRDashboard-->>Maintainer: Render Conflict DAG (with merge reasoning & post-merge impact) & open questions
+    alt Gap found in skills during PR analysis
+        PRDashboard->>SkillUpdater: Send logs to answer and update those project skills via updater
+    end
 ```
-[User Flow Diagram Placeholder]
-```
-
-### Key User Journeys
-
-TODO: Document main user flows:
-
-1. **User Journey 1**: Description
-   - Step 1
-   - Step 2
-   - Step 3
-
-2. **User Journey 2**: Description
-   - Step 1
-   - Step 2
-   - Step 3
-
-3. **User Journey 3**: Description
-   - Step 1
-   - Step 2
-   - Step 3
 
 ---
 
-## �🍀 Getting Started
+## 🏁 Getting Started
 
 ### Prerequisites
 
-TODO: List what developers need installed
+Ensure you have the following installed on your local machine:
+* **Python 3.10+** and **Node.js 18+**
+* **Ollama** running locally:
+  * Pull embed model: `ollama pull nomic-embed-text`
+  * Pull inference model: `ollama pull qwen2.5:7b` (or `llama3`)
+* **GitHub CLI (`gh`)** installed and authenticated with your GitHub account.
 
-- Node.js 18+ / Python 3.9+ / Flutter SDK
-- npm / yarn / pnpm
-- [Any specific tools or accounts needed]
-
-### Installation
-
-TODO: Provide detailed setup instructions
+### Installation & Setup
 
 #### 1. Clone the Repository
-
 ```bash
-git clone https://github.com/AOSSIE-Org/TODO.git
-cd TODO
+git clone https://github.com/AOSSIE-Org/Skills.git
+cd Skills
 ```
 
-#### 2. Install Dependencies
-
-```bash
-npm install
-# or
-yarn install
-# or
-pnpm install
-```
-
-#### 3. Configure Environment Variables(.env.example)
-
+#### 2. Configure Environment Variables
 Create a `.env` file in the root directory:
-
 ```env
-# Add your environment variables here
-API_KEY=your_api_key
-DATABASE_URL=your_database_url
+OLLAMA_HOST=http://localhost:11434
+DISCORD_TOKEN=your_discord_bot_token
+GITHUB_TOKEN=your_github_personal_access_token
 ```
 
-#### 4. Run the Development Server
-
+#### 3. Run the Interactive Simulation Dashboard Locally
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+cd InteractiveSimulation
+# The simulation is static and can be served using any local web server
+python -m http.server 8000
 ```
-
-#### 5. Open your Browser
-
-Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
-
-For detailed setup instructions, please refer to our [Installation Guide](./docs/INSTALL_GUIDE.md) (if you have one).
-
----
-
-## 📱 App Screenshots
-
-TODO: Add screenshots showcasing your application
-
-|  |  |  |
-|---|---|---|
-| Screenshot 1 | Screenshot 2 | Screenshot 3 |
+Navigate to [http://localhost:8000](http://localhost:8000) to trace data pipelines interactively.
 
 ---
 
@@ -251,16 +212,14 @@ TODO: Add screenshots showcasing your application
 
 ⭐ Don't forget to star this repository if you find it useful! ⭐
 
-Thank you for considering contributing to this project! Contributions are highly appreciated and welcomed. To ensure smooth collaboration, please refer to our [Contribution Guidelines](./CONTRIBUTING.md).
+Thank you for considering contributing to the AOSSIE Skills Ecosystem! Contributions are highly appreciated. To ensure smooth collaboration, please refer to our [Contribution Guidelines](./CONTRIBUTING.md).
 
 ---
 
 ## ✨ Maintainers
 
-TODO: Add maintainer information
-
-- [Maintainer Name](https://github.com/username)
-- [Maintainer Name](https://github.com/username)
+* [Karun Pacholi](https://github.com/kpj2006) - Lead Developer & Architect
+* [zahnentferner](https://github.com/Zahnentferner) - admin & reviewer
 
 ---
 
@@ -273,8 +232,8 @@ See the [LICENSE](LICENSE) file for details.
 
 ## 💪 Thanks To All Contributors
 
-Thanks a lot for spending your time helping TODO grow. Keep rocking 🥂
+Thanks a lot for spending your time helping this ecosystem grow. Keep rocking 🥂
 
-[![Contributors](https://contrib.rocks/image?repo=AOSSIE-Org/TODO)](https://github.com/AOSSIE-Org/TODO/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=AOSSIE-Org/Skills)](https://github.com/AOSSIE-Org/Skills/graphs/contributors)
 
-© 2025 AOSSIE 
+© 2026 AOSSIE
